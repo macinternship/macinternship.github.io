@@ -1,4 +1,3 @@
-var WebSocketServer = require("ws").Server
 var http = require("http")
 var express = require("express")
 var app = express()
@@ -12,35 +11,17 @@ server.listen(port)
 
 console.log("http server listening on %d", port)
 
-var mysql = require("mysql");
-
-// First you need to create a connection to the db
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "macinternship"
+var baseClient;
+pg.connect(process.env.DATABASE_URL, function(err, client) {
+	baseClient = client;
 });
-
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
-});
-
-// con.end(function(err) {
-//   // The connection is terminated gracefully
-//   // Ensures all previously enqueued queries are still
-//   // before sending a COM_QUIT packet to the MySQL server.
-// });
+var that = this;
 
 app.post('/login', function (req, res) {
-	con.query('SELECT * FROM login',function(err,rows){
-		if(err) throw err;
+	console.log('got query');
 
-		console.log('Data received from Db:\n');
+	var query = baseClient.query('SELECT * FROM login');
+	query.on('row', function(row) {
 		console.log(rows);
 		res.json(rows);
 	});
