@@ -72,21 +72,22 @@ app.post('/createaccount', function (req, res) {
     if(req.body.type == 'admin'){
         if(req.body.promo == 'macadmin'){
             insertFeed(req.body.username, 'created a new account');
-            createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);            
+            createaccount(req.body.username, req.body.password, req.body.photoid, req.body.type);            
         }else{
             res.json('invalid promo code');
         }
     }else{
         insertFeed(req.body.username, 'created a new student account');
-        createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);       
+        createaccount(req.body.username, req.body.password, req.body.photoid, req.body.type);       
         createstudent(req.body.username, req.body.firstname, req.body.middlename, 
             req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
-            req.body.residentstatus, req.body.country, req.body.internshipstatus);
+            req.body.residentstatus, req.body.country, req.body.semesterregistered,
+            req.body.internshipstatus);
     }
     res.json('created');
 });
 
-function createaccout(username, password, photoid, type){
+function createaccount(username, password, photoid, type){
     var rows = [];
     var queryString = "INSERT INTO login (username, password, photoid, type) VALUES ('" + 
     username + "', '" + 
@@ -105,11 +106,11 @@ function createaccout(username, password, photoid, type){
 
 function createstudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, country, internshipstatus){
+            residentstatus, country, internshipstatus, semesterregistered){
     var rows = [];
     var queryString = "INSERT INTO student (studentid, firstname, middlename, "+
             "lastname, email, telephone, gender, " +
-            "residentstatus, country, internshipstatus) VALUES ('" + 
+            "residentstatus, country, semesterregistered, internshipstatus) VALUES ('" + 
     username + "', '" +  
     firstname + "', '" +  
     middlename + "', '" +  
@@ -119,6 +120,7 @@ function createstudent(username, firstname, middlename,
     gender + "', '" +  
     residentstatus + "', '" +  
     country + "', '" +  
+    semesterregistered + "', '" +  
     internshipstatus + "');";
 
     var query = baseClient.query(queryString);
@@ -132,15 +134,17 @@ function createstudent(username, firstname, middlename,
 
 app.post('/updatestudent', function (req, res) {
     console.log('updatestudent:' + req.body.username);
+    insertFeed(req.body.username, 'updated student information');
     updatestudent(req.body.username, req.body.firstname, req.body.middlename, 
         req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
-        req.body.residentstatus, req.body.country, req.body.internshipstatus);
+        req.body.residentstatus, req.body.country, req.body.semesterregistered, 
+        req.body.internshipstatus);
     res.json('updated');
 });
 
 function updatestudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, country, internshipstatus){
+            residentstatus, country, semesterregistered, internshipstatus){
     var rows = [];
     var queryString = "UPDATE student SET " +
     "firstname = '" + firstname + "', " +  
@@ -151,6 +155,7 @@ function updatestudent(username, firstname, middlename,
     "gender = '" + gender + "', " +  
     "residentstatus = '" + residentstatus + "', " +  
     "country = '" + country + "', " +  
+    "semesterregistered = '" + semesterregistered + "', " +  
     "internshipstatus = '" + internshipstatus + "' where " +
     "studentid = '" + username + "';";    
 

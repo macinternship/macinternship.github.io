@@ -6,22 +6,6 @@ photoid	TEXT,
 type TEXT
 );
 
-create table internship (
-id SERIAL PRIMARY KEY,
-type TEXT,
-companyname TEXT,
-address TEXT,
-city TEXT,
-postalcode TEXT,
-country TEXT,
-contactpersonfirstname TEXT,
-contactpersonlastname TEXT,
-contactpersonposition TEXT,
-telephone TEXT,
-email TEXT,
-companywebsite TEXT,
-notes TEXT);
-
 create table student (
 id SERIAL PRIMARY KEY,
 studentid TEXT,
@@ -33,19 +17,21 @@ telephone TEXT,
 gender TEXT,
 residentstatus TEXT,
 country TEXT,
+semesterregistered TEXT,
 internshipstatus TEXT);
 
-create table student_internship (
+create table internship (
 id SERIAL PRIMARY KEY,
 studentid TEXT,
-internshipid TEXT);
-
+type TEXT,
+companyid TEXT,
+notes TEXT);
 
 create table job (
 id SERIAL PRIMARY KEY,
 companyid TEXT,
 position TEXT,
-desc TEXT,
+description TEXT,
 responsibilities TEXT,
 requirements TEXT,
 salary TEXT,
@@ -53,7 +39,18 @@ availability TEXT);
 
 create table company (
 id SERIAL PRIMARY KEY,
-companyname TEXT);
+photoid	TEXT,
+companyname TEXT,
+address TEXT,
+city TEXT,
+postalcode TEXT,
+country TEXT,
+contactpersonfirstname TEXT,
+contactpersonlastname TEXT,
+contactpersonposition TEXT,
+telephone TEXT,
+email TEXT,
+companywebsite TEXT);
 
 create table student_job_achieved (
 id SERIAL PRIMARY KEY,
@@ -67,7 +64,6 @@ jobid TEXT);
 
 create table semesterregistered (
 id SERIAL PRIMARY KEY,
-studentid TEXT,
 semester TEXT,
 year TEXT);
 
