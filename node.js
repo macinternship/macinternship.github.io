@@ -61,6 +61,7 @@ app.post('/updatepassword', function (req, res) {
     });
     query.on('end', function(result) {
         console.log('updatepassword: ' + result.rowCount + ' rows');
+        if(result.rowCount == 0)
         res.json('password not changed');
     });
 });
