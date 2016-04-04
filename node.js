@@ -26,7 +26,8 @@ app.post('/login', function (req, res) {
     console.log(req.body.username);
 	// console.log(req.body.password);
 	var rows = [];
-	var query = baseClient.query('SELECT * FROM login where username = "' + req.body.username + '" and password="' + req.body.password + '";');
+    var queryString = "SELECT * FROM login where username = '" + req.body.username + "' and password='" + req.body.password + "';";
+	var query = baseClient.query(queryString);
 	query.on('row', function(row) {
 		rows.push(row);
 	});
