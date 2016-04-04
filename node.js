@@ -4,6 +4,11 @@ var app = express()
 var port = process.env.PORT || 5000
 var pg = require('pg');
 
+var bodyParser = require('body-parser');
+var app = express()
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 app.use(express.static(__dirname + "/"))
 
 var server = http.createServer(app)
@@ -18,17 +23,16 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 var that = this;
 
 app.post('/login', function (req, res) {
-	console.log('Got query');
-
+    console.log(req.body.username);
+	// console.log(req.body.password);
 	var rows = [];
-	var query = baseClient.query('SELECT * FROM login');
+	var query = baseClient.query('SELECT * FROM login where username = "' + req.body.username + '" and password="' + req.body.password + '";');
 	query.on('row', function(row) {
 		rows.push(row);
-		
 	});
 	query.on('end', function(result) {
-	    console.log(result.rowCount + ' rows were received');
-	    console.log(rows);
+	    console.log('login: ' + result.rowCount + ' rows');
+	    // console.log(rows);
 		res.json(rows);
 	});
 });
