@@ -45,6 +45,29 @@ app.post('/login', function (req, res) {
 	});
 });
 
+app.post('/updatepassword', function (req, res) {
+    console.log('updatepassword:' + req.body.username);
+    
+    var rows = [];
+    var queryString = "SELECT * FROM login where username = '" + req.body.username + "' and password='" + req.body.password + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+        if(row.password == req.body.password){
+            insertFeed(req.body.username, 'changed his password');
+            var queryStringInner = "UPDATE login SET password = '" + req.body.newpassword +"' where username = '" + req.body.username + "';";
+            var queryInner = baseClient.query(queryStringInner);
+            res.json('password changed');
+        }else{
+            res.json('password not changed');
+        }
+    });
+    query.on('end', function(result) {
+        console.log('updatepassword: ' + result.rowCount + ' rows');
+        res.json('password not changed');
+    });
+});
+
 app.post('/createaccount', function (req, res) {
     console.log('createaccount:' + req.body.username);
     console.log('createaccount:' + req.body.type);
