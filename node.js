@@ -48,7 +48,6 @@ app.post('/login', function (req, res) {
 app.post('/createaccount', function (req, res) {
     console.log('createaccount:' + req.body.username);
     console.log('createaccount:' + req.body.type);
-    console.log('createaccount:' + req.body.promo);
     if(req.body.type == 'admin'){
         if(req.body.promo == 'macadmin'){
             insertFeed(req.body.username, 'created a new account');
@@ -59,9 +58,9 @@ app.post('/createaccount', function (req, res) {
     }else{
         insertFeed(req.body.username, 'created a new student account');
         createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);       
-        // createstudent(req.body.username, req.body.firstname, req.body.middlename, 
-        //     req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
-        //     req.body.residentstatus, req.body.internshipstatus);
+        createstudent(req.body.username, req.body.firstname, req.body.middlename, 
+            req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
+            req.body.residentstatus, req.body.internshipstatus);
     }
     res.json('created');
 });
@@ -83,7 +82,31 @@ function createaccout(username, password, photoid, type){
     });
 }
 
+function createstudent(username, firstname, middlename, 
+            lastname, email, telephone, gender, 
+            residentstatus, internshipstatus){
+    var rows = [];
+    var queryString = "INSERT INTO login (studentid, firstname, middlename, "+
+            "lastname, email, telephone, gender, " +
+            "residentstatus, internshipstatus) VALUES ('" + 
+    username + "', '" +  
+    firstname + "', '" +  
+    middlename + "', '" +  
+    lastname + "', '" +  
+    email + "', '" +  
+    telephone + "', '" +  
+    gender + "', '" +  
+    residentstatus + "', '" +  
+    internshipstatus + "');";
 
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('createaccount: ' + result.rowCount + ' rows');
+    });
+}
 
 
 
