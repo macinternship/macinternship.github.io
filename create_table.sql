@@ -1,94 +1,96 @@
 create table login (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-username CHAR(100),	
-password CHAR(100),
-photoid CHAR(100),
-type CHAR(100));
+id SERIAL PRIMARY KEY,
+username TEXT,	
+password TEXT,
+photoid	TEXT,
+type TEXT
+);
 
 create table internship (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-type CHAR(100),
-companyname CHAR(100),
-address CHAR(100),
-city CHAR(100),
-postalcode CHAR(100),
-country CHAR(100),
-contactpersonfirstname CHAR(100),
-contactpersonlastname CHAR(100),
-contactpersonposition CHAR(100),
-telephone CHAR(100),
-email CHAR(100),
-companywebsite CHAR(100),
-notes CHAR(100));
+id SERIAL PRIMARY KEY,
+type TEXT,
+companyname TEXT,
+address TEXT,
+city TEXT,
+postalcode TEXT,
+country TEXT,
+contactpersonfirstname TEXT,
+contactpersonlastname TEXT,
+contactpersonposition TEXT,
+telephone TEXT,
+email TEXT,
+companywebsite TEXT,
+notes TEXT);
 
 create table student (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-firstname CHAR(100),
-middlename CHAR(100),
-lastname CHAR(100),
-email CHAR(100),
-telephone CHAR(100),
-gender CHAR(100),
-residentstatus CHAR(100),
-internshipstatus CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+firstname TEXT,
+middlename TEXT,
+lastname TEXT,
+email TEXT,
+telephone TEXT,
+gender TEXT,
+residentstatus TEXT,
+internshipstatus TEXT);
 
 create table student_internship (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-internshipid CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+internshipid TEXT);
+
 
 create table job (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-companyid CHAR(100),
-position CHAR(100),
-description CHAR(100),
-responsibilities CHAR(100),
-requirements CHAR(100),
-salary CHAR(100),
-availability CHAR(100));
+id SERIAL PRIMARY KEY,
+companyid TEXT,
+position TEXT,
+desc TEXT,
+responsibilities TEXT,
+requirements TEXT,
+salary TEXT,
+availability TEXT);
 
 create table company (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-companyname CHAR(100));
+id SERIAL PRIMARY KEY,
+companyname TEXT);
 
 create table student_job_achieved (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-jobid CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+jobid TEXT);
 
 create table student_job_interest (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-jobid CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+jobid TEXT);
 
 create table semesterregistered (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-semester CHAR(100),
-year CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+semester TEXT,
+year TEXT);
 
 create table education (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-degreetype CHAR(100),
-major CHAR(100),
-gpa CHAR(100),
-university CHAR(100),
-location CHAR(100),
-certifications CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+degreetype TEXT,
+major TEXT,
+gpa TEXT,
+university TEXT,
+location TEXT,
+certifications TEXT);
 
 create table workexperience (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-company CHAR(100),
-location CHAR(100),
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+company TEXT,
+location TEXT,
 startdate timestamp,
 enddate timestamp,
-position CHAR(100));
+position TEXT);
 
 create table skill (
-id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-studentid CHAR(100),
-type CHAR(100),
-value CHAR(100));
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+type TEXT,
+value TEXT);

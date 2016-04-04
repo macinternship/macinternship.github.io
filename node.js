@@ -9,7 +9,7 @@ app.use(express.static(__dirname + "/"))
 var server = http.createServer(app)
 server.listen(port)
 
-console.log("http server listening on %d", port)
+console.log("Listening on %d", port)
 
 var baseClient;
 pg.connect(process.env.DATABASE_URL, function(err, client) {
@@ -18,12 +18,12 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 var that = this;
 
 app.post('/login', function (req, res) {
-	console.log('got query');
+	console.log('Got query');
 
 	var query = baseClient.query('SELECT * FROM login');
 	query.on('row', function(row) {
-		console.log(rows);
-		res.json(rows);
+		console.log(row);
+		res.json(row);
 	});
 });
 
