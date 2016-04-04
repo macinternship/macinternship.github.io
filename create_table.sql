@@ -32,6 +32,7 @@ email TEXT,
 telephone TEXT,
 gender TEXT,
 residentstatus TEXT,
+country TEXT,
 internshipstatus TEXT);
 
 create table student_internship (

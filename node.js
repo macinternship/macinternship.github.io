@@ -60,7 +60,7 @@ app.post('/createaccount', function (req, res) {
         createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);       
         createstudent(req.body.username, req.body.firstname, req.body.middlename, 
             req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
-            req.body.residentstatus, req.body.internshipstatus);
+            req.body.residentstatus, req.body.country, req.body.internshipstatus);
     }
     res.json('created');
 });
@@ -84,11 +84,11 @@ function createaccout(username, password, photoid, type){
 
 function createstudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, internshipstatus){
+            residentstatus, country, internshipstatus){
     var rows = [];
     var queryString = "INSERT INTO login (studentid, firstname, middlename, "+
             "lastname, email, telephone, gender, " +
-            "residentstatus, internshipstatus) VALUES ('" + 
+            "residentstatus, country, internshipstatus) VALUES ('" + 
     username + "', '" +  
     firstname + "', '" +  
     middlename + "', '" +  
@@ -97,6 +97,7 @@ function createstudent(username, firstname, middlename,
     telephone + "', '" +  
     gender + "', '" +  
     residentstatus + "', '" +  
+    country + "', '" +  
     internshipstatus + "');";
 
     var query = baseClient.query(queryString);
