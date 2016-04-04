@@ -79,9 +79,7 @@ function createaccout(username, password, photoid, type){
         rows.push(row);
     });
     query.on('end', function(result) {
-        console.log('createaccout: ' + result.rowCount + ' rows');
-        // console.log(rows);
-        res.json(rows);
+        console.log('createaccount: ' + result.rowCount + ' rows');
     });
 }
 
