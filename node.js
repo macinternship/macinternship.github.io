@@ -22,6 +22,11 @@ pg.connect(process.env.DATABASE_URL, function(err, client) {
 });
 var that = this;
 
+function insertFeed(studentid, value){
+    var queryString = "INSERT INTO feed (studentid, value, datetime) values('" + studentid + "', '" + value + "',now());";
+    var query = baseClient.query(queryString);
+}
+
 app.post('/login', function (req, res) {
     console.log(req.body.username);
     
@@ -39,11 +44,44 @@ app.post('/login', function (req, res) {
 	});
 });
 
-function insertFeed(studentid, value){
-    var queryString = "INSERT INTO feed (studentid, value, datetime) values('" + studentid + "', '" + value + "',now());";
-    console.log(queryString)
+app.post('/createaccout', function (req, res) {
+    console.log(req.body.username);
+    if(req.body.type == 'admin'){
+        if(req.body.promo == 'macadmin'){
+            insertFeed(req.body.username, 'created a new account');
+            createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);            
+        }else{
+            res.json('invalid promo code');
+        }
+    }else{
+        insertFeed(req.body.username, 'created a new student account');
+        createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);       
+        createstudent(req.body.username, req.body.firstname, req.body.middlename, 
+            req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
+            req.body.residentstatus, req.body.internshipstatus);
+    }
+    res.json('created');
+});
+
+function createaccout(username, password, photoid, type){
+    var rows = [];
+    var queryString = "INSERT INTO login (username, password, photoid, type) VALUES ('" + 
+    username + "', '" + 
+    password + "', '" + 
+    photoid + "', '" + 
+    type + "');'" + 
+    
     var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('createaccout: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        res.json(rows);
+    });
 }
+
 
 
 
