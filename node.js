@@ -24,11 +24,12 @@ var that = this;
 
 function insertFeed(studentid, value){
     var queryString = "INSERT INTO feed (studentid, value, datetime) values('" + studentid + "', '" + value + "',now());";
+    if(baseClient != null)
     var query = baseClient.query(queryString);
 }
 
 app.post('/login', function (req, res) {
-    console.log(req.body.username);
+    console.log('login:' + req.body.username);
     
     insertFeed(req.body.username, 'logged in');
     var rows = [];
@@ -44,8 +45,10 @@ app.post('/login', function (req, res) {
 	});
 });
 
-app.post('/createaccout', function (req, res) {
-    console.log(req.body.username);
+app.post('/createaccount', function (req, res) {
+    console.log('createaccount:' + req.body.username);
+    console.log('createaccount:' + req.body.type);
+    console.log('createaccount:' + req.body.promo);
     if(req.body.type == 'admin'){
         if(req.body.promo == 'macadmin'){
             insertFeed(req.body.username, 'created a new account');
@@ -56,9 +59,9 @@ app.post('/createaccout', function (req, res) {
     }else{
         insertFeed(req.body.username, 'created a new student account');
         createaccout(req.body.username, req.body.password, req.body.photoid, req.body.type);       
-        createstudent(req.body.username, req.body.firstname, req.body.middlename, 
-            req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
-            req.body.residentstatus, req.body.internshipstatus);
+        // createstudent(req.body.username, req.body.firstname, req.body.middlename, 
+        //     req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
+        //     req.body.residentstatus, req.body.internshipstatus);
     }
     res.json('created');
 });
@@ -69,8 +72,8 @@ function createaccout(username, password, photoid, type){
     username + "', '" + 
     password + "', '" + 
     photoid + "', '" + 
-    type + "');'" + 
-    
+    type + "');";
+
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
