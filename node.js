@@ -53,14 +53,11 @@ app.post('/updatepassword', function (req, res) {
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
-        if(row.password == req.body.password){
-            insertFeed(req.body.username, 'changed his password');
-            var queryStringInner = "UPDATE login SET password = '" + req.body.newpassword +"' where username = '" + req.body.username + "';";
-            var queryInner = baseClient.query(queryStringInner);
-            res.json('password changed');
-        }else{
-            res.json('password not changed');
-        }
+        insertFeed(req.body.username, 'changed password');
+        var queryStringInner = "UPDATE login SET password = '" + req.body.newpassword +"' where username = '" + req.body.username + "';";
+        console.log(queryStringInner);
+        var queryInner = baseClient.query(queryStringInner);
+        res.json('password changed');
     });
     query.on('end', function(result) {
         console.log('updatepassword: ' + result.rowCount + ' rows');
