@@ -86,7 +86,7 @@ function createstudent(username, firstname, middlename,
             lastname, email, telephone, gender, 
             residentstatus, country, internshipstatus){
     var rows = [];
-    var queryString = "INSERT INTO login (studentid, firstname, middlename, "+
+    var queryString = "INSERT INTO student (studentid, firstname, middlename, "+
             "lastname, email, telephone, gender, " +
             "residentstatus, country, internshipstatus) VALUES ('" + 
     username + "', '" +  
