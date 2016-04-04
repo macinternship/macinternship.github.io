@@ -24,8 +24,9 @@ var that = this;
 
 app.post('/login', function (req, res) {
     console.log(req.body.username);
-	// console.log(req.body.password);
-	var rows = [];
+    
+    insertFeed(req.body.username, 'logged in');
+    var rows = [];
     var queryString = "SELECT * FROM login where username = '" + req.body.username + "' and password='" + req.body.password + "';";
 	var query = baseClient.query(queryString);
 	query.on('row', function(row) {
@@ -37,6 +38,12 @@ app.post('/login', function (req, res) {
 		res.json(rows);
 	});
 });
+
+function insertFeed(studentid, value){
+    var queryString = "INSERT INTO feed (studentid, value, datetime) values('" + studentid + "', '" + value + "',now());";
+    console.log(queryString)
+    var query = baseClient.query(queryString);
+}
 
 
 

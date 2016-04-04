@@ -93,4 +93,12 @@ create table skill (
 id SERIAL PRIMARY KEY,
 studentid TEXT,
 type TEXT,
-value TEXT);
+value TEXT,
+levelOfKnowledge TEXT);
+
+create table feed(
+id SERIAL PRIMARY KEY,
+studentid TEXT,
+value TEXT,
+datetime timestamp
+);
