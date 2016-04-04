@@ -20,10 +20,16 @@ var that = this;
 app.post('/login', function (req, res) {
 	console.log('Got query');
 
+	var rows = [];
 	var query = baseClient.query('SELECT * FROM login');
 	query.on('row', function(row) {
-		console.log(row);
-		res.json(row);
+		rows.push(row);
+		
+	});
+	query.on('end', function(result) {
+	    console.log(result.rowCount + ' rows were received');
+	    console.log(rows);
+		res.json(rows);
 	});
 });
 
