@@ -106,7 +106,7 @@ function createaccount(username, password, photoid, type){
 
 function createstudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, country, internshipstatus, semesterregistered){
+            residentstatus, country, semesterregistered, internshipstatus){
     var rows = [];
     var queryString = "INSERT INTO student (studentid, firstname, middlename, "+
             "lastname, email, telephone, gender, " +
