@@ -130,7 +130,38 @@ function createstudent(username, firstname, middlename,
     });
 }
 
+app.post('/updatestudent', function (req, res) {
+    console.log('updatestudent:' + req.body.username);
+    updatestudent(req.body.username, req.body.firstname, req.body.middlename, 
+        req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
+        req.body.residentstatus, req.body.country, req.body.internshipstatus);
+    res.json('updated');
+});
 
+function updatestudent(username, firstname, middlename, 
+            lastname, email, telephone, gender, 
+            residentstatus, country, internshipstatus){
+    var rows = [];
+    var queryString = "UPDATE student SET " +
+    "firstname = '" + firstname + "', " +  
+    "middlename = '" + middlename + "', " +  
+    "lastname = '" + lastname + "', " +  
+    "email = '" + email + "', " +  
+    "telephone = '" + telephone + "', " +  
+    "gender = '" + gender + "', " +  
+    "residentstatus = '" + residentstatus + "', " +  
+    "country = '" + country + "', " +  
+    "internshipstatus = '" + internshipstatus + "' where " +
+    "studentid = '" + username + "';";    
+
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('createaccount: ' + result.rowCount + ' rows');
+    });
+}
 
 
 
