@@ -386,18 +386,18 @@ app.post('/showstudents', function (req, res) {
     console.log('showstudents: parameters');
     
     var rows = [];
-    var display = req.body.gender == "all"?"(1)":"(gender = '" + req.body.gender + "')";
+    var display = req.body.gender == "all"?"(gender like '%')":"(gender = '" + req.body.gender + "')";
     display += " AND ";
-    display += req.body.residentstatus == "all"?"(1)":"(residentstatus = '" + req.body.residentstatus + "')";
+    display += req.body.residentstatus == "all"?"(residentstatus like '%')":"(residentstatus = '" + req.body.residentstatus + "')";
     display += " AND ";
-    display += req.body.country == "all"?"(1)":"(country = '" + req.body.country + "')";
+    display += req.body.country == "all"?"(country like '%')":"(country = '" + req.body.country + "')";
     display += " AND ";
-    display += req.body.semesterregistered == "all"?"(1)":"(semesterregistered = '" + req.body.semesterregistered + "')";
+    display += req.body.semesterregistered == "all"?"(semesterregistered like '%')":"(semesterregistered = '" + req.body.semesterregistered + "')";
     display += " AND ";
-    display += req.body.internshipstatus == "all"?"(1)":"(internshipstatus = '" + req.body.internshipstatus + "')";
+    display += req.body.internshipstatus == "all"?"(internshipstatus like '%')":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
     console.log(display)
-    var queryString = "SELECT * FROM students where " + display;
+    var queryString = "SELECT * FROM student where " + display;
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
