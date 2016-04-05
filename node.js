@@ -394,7 +394,7 @@ app.post('/showstudents', function (req, res) {
     display += " AND ";
     display += req.body.semesterregistered == "all"?"(1)":"(semesterregistered = '" + req.body.semesterregistered + "')";
     display += " AND ";
-    display += req.body.internshipstatus == "all"?"(1)":"(country = '" + req.body.internshipstatus + "')";
+    display += req.body.internshipstatus == "all"?"(1)":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
     console.log(display)
     var queryString = "SELECT * FROM students " + display;
