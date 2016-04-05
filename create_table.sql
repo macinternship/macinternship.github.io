@@ -80,7 +80,7 @@ certifications TEXT);
 create table workexperience (
 id SERIAL PRIMARY KEY,
 studentid TEXT,
-company TEXT,
+companyid TEXT,
 location TEXT,
 startdate timestamp,
 enddate timestamp,
@@ -99,3 +99,6 @@ studentid TEXT,
 value TEXT,
 datetime timestamp
 );
+
+insert into semesterregistered (semester, year) values ('fall', '2015');
+insert into semesterregistered (semester, year) values ('winter', '2016');

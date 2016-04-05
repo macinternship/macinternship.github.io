@@ -168,9 +168,42 @@ function updatestudent(username, firstname, middlename,
     });
 }
 
+app.post('/addeducation', function (req, res) {
+    console.log('addeducation:' + req.body.username);
 
+    var rows = [];
+    var queryString = "INSERT INTO education (studentid, degreetype, major, "+
+            "gpa, university, location, certifications) VALUES ('" + 
+    username + "', '" +  
+    degreetype + "', '" +  
+    major + "', '" +  
+    gpa + "', '" +  
+    university + "', '" +  
+    location + "', '" +  
+    certifications + "');";
 
+    var query = baseClient.query(queryString);
 
+    res.json('added');
+});
+
+app.post('/addworkexperience', function (req, res) {
+    console.log('addworkexperience:' + req.body.username);
+
+    var rows = [];
+    var queryString = "INSERT INTO workexperience (studentid, companyid, location, "+
+            "startdate, enddate, location, position) VALUES ('" + 
+    username + "', '" +  
+    companyid + "', '" +  
+    location + "', '" +  
+    startdate + "', '" +  
+    enddate + "', '" +  
+    position + "');";
+
+    var query = baseClient.query(queryString);
+
+    res.json('added');
+});
 
 
 
