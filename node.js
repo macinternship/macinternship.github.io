@@ -205,6 +205,32 @@ app.post('/addworkexperience', function (req, res) {
     res.json('added');
 });
 
+app.post('/addcompany', function (req, res) {
+    console.log('addcompany:' + req.body.username);
+    insertFeed(req.body.username, 'added new company ' + toTitleCase(companyname));
+
+    var rows = [];
+    var queryString = "INSERT INTO company (photoid, companyname, address, "+
+            "city, postalcode, country, contactpersonfirstname, contactpersonlastname, "+
+            "contactpersonposition, telephone, email, companywebsite) VALUES ('" + 
+    req.body.photoid + "', '" +  
+    req.body.companyname + "', '" +  
+    req.body.address + "', '" +  
+
+    req.body.city + "', '" +  
+    req.body.postalcode + "', '" +  
+    req.body.country + "', '" +  
+    req.body.contactpersonfirstname + "', '" +  
+    req.body.contactpersonlastname + "', '" +  
+
+    req.body.contactpersonposition + "', '" +  
+    req.body.telephone + "', '" +  
+    req.body.email + "', '" +  
+    req.body.companywebsite + "');";
+
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
 
 
 
@@ -213,6 +239,17 @@ app.post('/addworkexperience', function (req, res) {
 
 
 
+
+
+
+
+
+
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 function parseTwitterDate(tdate) {
     var system_date = new Date(Date.parse(tdate));
