@@ -295,7 +295,7 @@ app.post('/updateskill', function (req, res) {
     "macos = '" + req.body.macos + "," + 
     "unix = '" + req.body.unix + "," + 
     "windows = '" + req.body.windows + "' where " +
-    "studentid = '" + username + "';"; 
+    "studentid = '" + req.body.username + "';"; 
 
     var query = baseClient.query(queryString);
     res.json('added');
