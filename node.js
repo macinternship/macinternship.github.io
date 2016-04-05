@@ -191,7 +191,7 @@ app.post('/addworkexperience', function (req, res) {
 
     var rows = [];
     var queryString = "INSERT INTO workexperience (studentid, companyid, location, "+
-            "startdate, enddate, location, position) VALUES ('" + 
+            "startdate, enddate, position) VALUES ('" + 
     req.body.username + "', '" +  
     req.body.companyid + "', '" +  
     req.body.location + "', '" +  
