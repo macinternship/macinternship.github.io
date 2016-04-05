@@ -301,6 +301,57 @@ app.post('/updateskill', function (req, res) {
     res.json('added');
 });
 
+app.post('/addstudentjobachieved', function (req, res) {
+    console.log('addstudentjobachieved:' + req.body.username);
+    insertFeed(req.body.username, 'added a new job');
+
+    var rows = [];
+    var queryString = "INSERT INTO student_job_achieved (studentid, jobid) VALUES ('" + 
+    req.body.username + "', '" +  
+    req.body.jobid + "');";
+
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
+
+app.post('/addstudentjobinterest', function (req, res) {
+    console.log('addstudentjobinterest:' + req.body.username);
+    insertFeed(req.body.username, 'added a new job interest');
+
+    var rows = [];
+    var queryString = "INSERT INTO student_job_interest (studentid, jobid) VALUES ('" + 
+    req.body.username + "', '" +  
+    req.body.jobid + "');";
+
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
+
+app.post('/removestudentjobachieved', function (req, res) {
+    console.log('removestudentjobachieved:' + req.body.username);
+    insertFeed(req.body.username, 'removed a job');
+
+    var rows = [];
+    var queryString = "DELETE FROM student_job_achieved WHERE " + 
+    "studentid = '" + req.body.username + "' AND " +  
+    "jobid = '" + req.body.jobid + "';";
+
+    var query = baseClient.query(queryString);
+    res.json('removed');
+});
+
+app.post('/removestudentjobinterest', function (req, res) {
+    console.log('removestudentjobinterest:' + req.body.username);
+    insertFeed(req.body.username, 'removed a job interest');
+
+    var rows = [];
+    var queryString = "DELETE FROM student_job_interest WHERE " + 
+    "studentid = '" + req.body.username + "' AND " +  
+    "jobid = '" + req.body.jobid + "';";
+
+    var query = baseClient.query(queryString);
+    res.json('removed');
+});
 
 
 
