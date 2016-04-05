@@ -232,9 +232,21 @@ app.post('/addcompany', function (req, res) {
     res.json('added');
 });
 
+app.post('/addinternship', function (req, res) {
+    console.log('addinternship:' + req.body.username);
+    insertFeed(req.body.username, 'added new internship');
 
+    var rows = [];
+    var queryString = "INSERT INTO internship (studentid, type, companyid, "+
+            "notes) VALUES ('" + 
+    req.body.username + "', '" +  
+    req.body.type + "', '" +  
+    req.body.companyid + "', '" +  
+    req.body.notes + "');";
 
-
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
 
 
 
