@@ -255,7 +255,51 @@ function createzerovaluedskills(username){
     var query = baseClient.query(queryString);
 }
 
+app.post('/updateskill', function (req, res) {
+    console.log('updateskill:' + req.body.username);
+    insertFeed(req.body.username, 'updated skills set');
 
+    var rows = [];
+    var queryString = "UPDATE skill SET " +
+    "asp_dot_net = '" + req.body.asp_dot_net + "," + 
+    "c = '" + req.body.c + "," + 
+    "cplusplus = '" + req.body.cplusplus + "," + 
+    "csharp = '" + req.body.csharp + "," + 
+    "flex = '" + req.body.flex + "," + 
+    "java = '" + req.body.java + "," + 
+    "javascript = '" + req.body.javascript + "," + 
+    "lisp = '" + req.body.lisp + "," + 
+    "matlab = '" + req.body.matlab + "," + 
+    "mysql = '" + req.body.mysql + "," + 
+    "objectivec = '" + req.body.objectivec + "," + 
+    "pascal = '" + req.body.pascal + "," + 
+    "perl = '" + req.body.perl + "," + 
+    "php = '" + req.body.php + "," + 
+    "prolog = '" + req.body.prolog + "," + 
+    "python = '" + req.body.python + "," + 
+    "r = '" + req.body.r + "," + 
+    "ruby = '" + req.body.ruby + "," + 
+    "sql_oracle = '" + req.body.sql_oracle + "," + 
+    "tcl = '" + req.body.tcl + "," + 
+    "t_sql = '" + req.body.t_sql + "," + 
+    "vb_dot_net = '" + req.body.vb_dot_net + "," + 
+    "concrete = '" + req.body.concrete + "," + 
+    "dotnetnuke = '" + req.body.dotnetnuke + "," + 
+    "drupal = '" + req.body.drupal + "," + 
+    "joomla = '" + req.body.joomla + "," + 
+    "wordpress = '" + req.body.wordpress + "," + 
+    "android = '" + req.body.android + "," + 
+    "chromeos = '" + req.body.chromeos + "," + 
+    "ios = '" + req.body.ios + "," + 
+    "linux = '" + req.body.linux + "," + 
+    "macos = '" + req.body.macos + "," + 
+    "unix = '" + req.body.unix + "," + 
+    "windows = '" + req.body.windows + "' where " +
+    "studentid = '" + username + "';"; 
+
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
 
 
 
