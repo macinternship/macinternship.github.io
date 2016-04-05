@@ -83,6 +83,7 @@ app.post('/createaccount', function (req, res) {
             req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
             req.body.residentstatus, req.body.country, req.body.semesterregistered,
             req.body.internshipstatus);
+        createzerovaluedskills(req.body.username);
     }
     res.json('created');
 });
@@ -248,7 +249,11 @@ app.post('/addinternship', function (req, res) {
     res.json('added');
 });
 
-
+function createzerovaluedskills(username){
+    var queryString = "INSERT INTO skill (studentid) values('" + username + "');";
+    if(baseClient != null)
+    var query = baseClient.query(queryString);
+}
 
 
 
