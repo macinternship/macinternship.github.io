@@ -397,7 +397,7 @@ app.post('/showstudents', function (req, res) {
     display += req.body.internshipstatus == "all"?"(1)":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
     console.log(display)
-    var queryString = "SELECT * FROM students " + display;
+    var queryString = "SELECT * FROM students where " + display;
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
