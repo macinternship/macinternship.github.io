@@ -380,3 +380,32 @@ function parseTwitterDate(tdate) {
     if (diff <= 777600) {return "1 week ago";}
     return "on " + system_date;
 }
+
+//SELECT STUDENTS
+app.post('/showstudents', function (req, res) {
+    console.log('showstudents: parameters');
+    
+    var rows = [];
+    var display = req.body.gender == "all"?"(1)":"(gender = '" + req.body.gender + "')";
+    display += " AND ";
+    display += req.body.residentstatus == "all"?"(1)":"(residentstatus = '" + req.body.residentstatus + "')";
+    display += " AND ";
+    display += req.body.country == "all"?"(1)":"(country = '" + req.body.country + "')";
+    display += " AND ";
+    display += req.body.semesterregistered == "all"?"(1)":"(semesterregistered = '" + req.body.semesterregistered + "')";
+    display += " AND ";
+    display += req.body.internshipstatus == "all"?"(1)":"(country = '" + req.body.internshipstatus + "')";
+
+    console.log(display)
+    var queryString = "SELECT * FROM students " + display;
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('showstudents: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        res.json(rows);
+    });
+});
+
