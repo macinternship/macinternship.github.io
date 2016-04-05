@@ -174,16 +174,15 @@ app.post('/addeducation', function (req, res) {
     var rows = [];
     var queryString = "INSERT INTO education (studentid, degreetype, major, "+
             "gpa, university, location, certifications) VALUES ('" + 
-    username + "', '" +  
-    degreetype + "', '" +  
-    major + "', '" +  
-    gpa + "', '" +  
-    university + "', '" +  
-    location + "', '" +  
-    certifications + "');";
+    req.body.username + "', '" +  
+    req.body.degreetype + "', '" +  
+    req.body.major + "', '" +  
+    req.body.gpa + "', '" +  
+    req.body.university + "', '" +  
+    req.body.location + "', '" +  
+    req.body.certifications + "');";
 
     var query = baseClient.query(queryString);
-
     res.json('added');
 });
 
@@ -193,15 +192,14 @@ app.post('/addworkexperience', function (req, res) {
     var rows = [];
     var queryString = "INSERT INTO workexperience (studentid, companyid, location, "+
             "startdate, enddate, location, position) VALUES ('" + 
-    username + "', '" +  
-    companyid + "', '" +  
-    location + "', '" +  
-    startdate + "', '" +  
-    enddate + "', '" +  
-    position + "');";
+    req.body.username + "', '" +  
+    req.body.companyid + "', '" +  
+    req.body.location + "', '" +  
+    req.body.startdate + "', '" +  
+    req.body.enddate + "', '" +  
+    req.body.position + "');";
 
     var query = baseClient.query(queryString);
-
     res.json('added');
 });
 

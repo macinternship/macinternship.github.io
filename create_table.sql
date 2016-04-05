@@ -72,7 +72,7 @@ id SERIAL PRIMARY KEY,
 studentid TEXT,
 degreetype TEXT,
 major TEXT,
-gpa TEXT,
+gpa int,
 university TEXT,
 location TEXT,
 certifications TEXT);
