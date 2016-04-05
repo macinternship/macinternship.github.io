@@ -207,7 +207,7 @@ app.post('/addworkexperience', function (req, res) {
 
 app.post('/addcompany', function (req, res) {
     console.log('addcompany:' + req.body.username);
-    insertFeed(req.body.username, 'added new company ' + toTitleCase(companyname));
+    insertFeed(req.body.username, 'added new company ' + toTitleCase(req.body.companyname));
 
     var rows = [];
     var queryString = "INSERT INTO company (photoid, companyname, address, "+
