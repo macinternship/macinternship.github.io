@@ -170,6 +170,7 @@ function updatestudent(username, firstname, middlename,
 
 app.post('/addeducation', function (req, res) {
     console.log('addeducation:' + req.body.username);
+    insertFeed(req.body.username, 'added new education information');
 
     var rows = [];
     var queryString = "INSERT INTO education (studentid, degreetype, major, "+
@@ -188,6 +189,7 @@ app.post('/addeducation', function (req, res) {
 
 app.post('/addworkexperience', function (req, res) {
     console.log('addworkexperience:' + req.body.username);
+    insertFeed(req.body.username, 'added new work experience');
 
     var rows = [];
     var queryString = "INSERT INTO workexperience (studentid, companyid, location, "+

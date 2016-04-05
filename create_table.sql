@@ -82,8 +82,8 @@ id SERIAL PRIMARY KEY,
 studentid TEXT,
 companyid TEXT,
 location TEXT,
-startdate timestamp,
-enddate timestamp,
+startdate date,
+enddate date,
 position TEXT);
 
 create table skill (
