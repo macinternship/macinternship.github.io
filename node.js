@@ -532,19 +532,13 @@ app.post('/viewstudentworkexperience', function (req, res) {
 app.post('/viewallcompany', function (req, res) {
     console.log('viewallcompany:' + req.body.search);
     
-    var queryString = "SELECT * FROM company " +
-    "where companyname is not NULL OR companyname is NULL ";
-    
-    if(req.body.search.length > 0){
-        queryString = "SELECT * FROM company where companyname like '%" + req.body.search +
-        "%'";
-    }
-    if(req.body.city != 'all'){
-        queryString += " and city like '%" + req.body.city + "%'";
-    }
-    if(req.body.country != 'all'){
-        queryString += " and country like '%" + req.body.country + "%'";
-    }
+    var queryString = "SELECT * FROM company where ";
+
+    queryString += req.body.search == "all"?"(companyname like '%')":"(companyname = '" + req.body.search + "')";
+    queryString += " and ";
+    queryString += req.body.city == "all"?"(city like '%')":"(city = '" + req.body.city + "')";
+    queryString += " and ";
+    queryString += req.body.country == "all"?"(country like '%')":"(country = '" + req.body.country + "')";
 
     // res.json(queryString);
 
@@ -562,19 +556,13 @@ app.post('/viewallcompany', function (req, res) {
 app.post('/viewalljob', function (req, res) {
     console.log('viewalljob:' + req.body.search);
     
-    var queryString = "SELECT * FROM job inner join company on job.companyid = company.id " +
-    "where position is not NULL OR position is NULL ";
+    var queryString = "SELECT * FROM job inner join company on job.companyid = company.id where ";
     
-    if(req.body.search.length > 0){
-        queryString = "SELECT * FROM job inner join company on job.companyid = company.id " +
-        "where position like '%" + req.body.search + "%'";
-    }
-    if(req.body.city != 'all'){
-        queryString += " and city like '%" + req.body.city + "%'";
-    }
-    if(req.body.country != 'all'){
-        queryString += " and country like '%" + req.body.country + "%'";
-    }
+    queryString += req.body.search == "all"?"(position like '%')":"(position = '" + req.body.search + "')";
+    queryString += " and ";
+    queryString += req.body.city == "all"?"(city like '%')":"(city = '" + req.body.city + "')";
+    queryString += " and ";
+    queryString += req.body.country == "all"?"(country like '%')":"(country = '" + req.body.country + "')";
 
     // res.json(queryString);
     
