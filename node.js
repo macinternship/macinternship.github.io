@@ -404,6 +404,15 @@ function parseTwitterDate(tdate) {
 app.post('/showstudents', function (req, res) {
     console.log('showstudents: parameters');
     
+    //search
+    var searchQuery = "(firstname is NOT NULL OR firstname is NULL) OR " +
+        "(middlename is NOT NULL OR middlename is NULL) OR " + 
+        "(lastname is NOT NULL OR lastname is NULL)";
+    if(req.body.search.length > 0){
+        searchQuery = "(firstname like '%" + req.body.search + "%') OR " +
+            "(middlename like '%" + req.body.search + "%') OR " + 
+            "(lastname like '%" + req.body.search + "%')";
+    }
     var rows = [];
     //student info
     var display = req.body.gender == "all"?"(gender like '%')":"(gender = '" + req.body.gender + "')";
@@ -430,9 +439,10 @@ app.post('/showstudents', function (req, res) {
     var queryString = "SELECT distinct on (username) * " + 
     "FROM login inner join student on login.username = student.studentid left join " + 
     " student_job_achieved on student.studentid = student_job_achieved.studentid " +
-    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + 
-    " and " + hired + 
-    " and " + salary;
+    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + " and "
+    hired + " and "
+    salary + " and "
+    searchQuery;
 
     // res.json(queryString);
     var query = baseClient.query(queryString);
