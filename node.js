@@ -641,8 +641,9 @@ app.post('/getfeed', function(req, res) {
     var rows = [];
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
+        row.newdatetime = parseTwitterDate(row.datetime);
         rows.push(row);
-        console.log(row.datetime);
+        // console.log(row.datetime);
     });
     query.on('end', function(result) {
         console.log('viewalljob: ' + result.rowCount + ' rows');
