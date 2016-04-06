@@ -143,21 +143,6 @@ app.post('/updatestudent', function (req, res) {
     res.json('updated');
 });
 
-app.post('/viewstudent', function (req, res) {
-    console.log('viewstudent:' + req.body.username);
-    
-   var rows = [];
-    var queryString = "SELECT * FROM student where studentid = '" + req.body.username + "';";
-    var query = baseClient.query(queryString);
-    query.on('row', function(row) {
-        rows.push(row);
-    });
-    query.on('end', function(result) {
-        console.log('viewstudent: ' + result.rowCount + ' rows');
-        res.json(rows);
-    });
-});
-
 function updatestudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
             residentstatus, country, semesterregistered, internshipstatus){
@@ -490,3 +475,115 @@ app.post('/getgpa', function (req, res) {
         res.json(rows);
     });
 });
+
+
+app.post('/viewstudent', function (req, res) {
+    console.log('viewstudent:' + req.body.username);
+    
+   var rows = [];
+    var queryString = "SELECT * FROM student inner join semesterregistered on " +
+    "cast(student.semesterregistered as int) = semesterregistered.id where studentid = '" + req.body.username + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudent: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/viewstudenteducation', function (req, res) {
+    console.log('viewstudenteducation:' + req.body.username);
+    
+   var rows = [];
+    var queryString = "SELECT * FROM education where studentid = '" + req.body.username + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudenteducation: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/viewstudentworkexperience', function (req, res) {
+    console.log('viewstudentworkexperience:' + req.body.username);
+    
+   var rows = [];
+    var queryString = "SELECT * FROM workexperience inner join company " +
+    "on workexperience.companyid = company.id where studentid = '" + req.body.username + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudentworkexperience: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+
+
+
+
+
+app.post('/viewallcompany', function (req, res) {
+    console.log('viewallcompany:' + req.body.search);
+    
+    var queryString = "SELECT * FROM company;";
+    
+    if(req.body.search.length > 0){
+        queryString = "SELECT * FROM company where companyname like '%" + req.body.search +
+        "%'";
+    }
+    if(req.body.city != 'all'){
+        queryString += " and city like '%" + req.body.city + "%'";
+    }
+    if(req.body.country != 'all'){
+        queryString += " and country like '%" + req.body.country + "%'";
+    }
+
+    res.json(queryString);
+
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewallcompany: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/viewalljob', function (req, res) {
+    console.log('viewalljob:' + req.body.search);
+    
+    var queryString = "SELECT * FROM job inner join company on job.companyid = company.id;";
+    
+    if(req.body.search.length > 0){
+        queryString = "SELECT * FROM job inner join company on job.companyid = company.id " +
+        "where position like '%" + req.body.search + "%'";
+    }
+    if(req.body.city != 'all'){
+        queryString += " and city like '%" + req.body.city + "%'";
+    }
+    if(req.body.country != 'all'){
+        queryString += " and country like '%" + req.body.country + "%'";
+    }
+
+    res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewalljob: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
