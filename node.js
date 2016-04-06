@@ -143,6 +143,21 @@ app.post('/updatestudent', function (req, res) {
     res.json('updated');
 });
 
+app.post('/viewstudent', function (req, res) {
+    console.log('viewstudent:' + req.body.username);
+    
+   var rows = [];
+    var queryString = "SELECT * FROM student where studentid = '" + req.body.username + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudent: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
 function updatestudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
             residentstatus, country, semesterregistered, internshipstatus){
