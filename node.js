@@ -11,6 +11,12 @@ app.use(bodyParser.json())
 
 app.use(express.static(__dirname + "/"))
 
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, Authorization, Content-Type');
+  next();
+});
+
 var server = http.createServer(app)
 server.listen(port)
 
