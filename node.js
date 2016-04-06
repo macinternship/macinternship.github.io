@@ -456,3 +456,21 @@ app.post('/showstudents', function (req, res) {
     });
 });
 
+//average gpa
+app.post('/getgpa', function (req, res) {
+    console.log('getgpa: ' + req.body.studentids);
+    
+    var queryString = "select avg(gpa), studentid from education group by " +
+    "studentid having studentid in (" + studentids + ");"
+
+    // res.json(queryString);
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('getgpa: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        res.json(rows);
+    });
+});
