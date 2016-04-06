@@ -249,6 +249,25 @@ app.post('/addinternship', function (req, res) {
     res.json('added');
 });
 
+app.post('/addjob', function (req, res) {
+    console.log('addjob:' + req.body.username);
+    insertFeed(req.body.username, 'posted a new job');
+
+    var rows = [];
+    var queryString = "INSERT INTO job (companyid, position, description, "+
+            "responsibilities, requirements, salary, availability) VALUES ('" + 
+    req.body.companyid + "', '" +  
+    req.body.position + "', '" +  
+    req.body.description + "', '" +  
+    req.body.responsibilities + "', '" +  
+    req.body.requirements + "', '" +  
+    req.body.salary + "', '" +  
+    req.body.availability + "');";
+
+    var query = baseClient.query(queryString);
+    res.json('added');
+});
+
 function createzerovaluedskills(username){
     var queryString = "INSERT INTO skill (studentid) values('" + username + "');";
     if(baseClient != null)
@@ -303,7 +322,7 @@ app.post('/updateskill', function (req, res) {
 
 app.post('/addstudentjobachieved', function (req, res) {
     console.log('addstudentjobachieved:' + req.body.username);
-    insertFeed(req.body.username, 'added a new job');
+    insertFeed(req.body.username, 'got a new job');
 
     var rows = [];
     var queryString = "INSERT INTO student_job_achieved (studentid, jobid) VALUES ('" + 
@@ -316,7 +335,7 @@ app.post('/addstudentjobachieved', function (req, res) {
 
 app.post('/addstudentjobinterest', function (req, res) {
     console.log('addstudentjobinterest:' + req.body.username);
-    insertFeed(req.body.username, 'added a new job interest');
+    insertFeed(req.body.username, 'is interested in a job');
 
     var rows = [];
     var queryString = "INSERT INTO student_job_interest (studentid, jobid) VALUES ('" + 
@@ -329,7 +348,7 @@ app.post('/addstudentjobinterest', function (req, res) {
 
 app.post('/removestudentjobachieved', function (req, res) {
     console.log('removestudentjobachieved:' + req.body.username);
-    insertFeed(req.body.username, 'removed a job');
+    insertFeed(req.body.username, 'is removed from a job');
 
     var rows = [];
     var queryString = "DELETE FROM student_job_achieved WHERE " + 
@@ -397,7 +416,7 @@ app.post('/showstudents', function (req, res) {
     display += req.body.internshipstatus == "all"?"(internshipstatus like '%')":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
     console.log(display)
-    var queryString = "SELECT * " + 
+    var queryString = "SELECT distinct on (username) * " + 
     "FROM student inner join login on login.username = student.studentid where " + display;
 
     var query = baseClient.query(queryString);
