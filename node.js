@@ -397,7 +397,8 @@ app.post('/showstudents', function (req, res) {
     display += req.body.internshipstatus == "all"?"(internshipstatus like '%')":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
     console.log(display)
-    var queryString = "SELECT * FROM student where " + display;
+    var queryString = "SELECT * " + 
+    "FROM student inner join login where login.username = student.studentid and " + display;
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
