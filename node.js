@@ -613,3 +613,20 @@ app.post('/addsemester', function (req, res) {
     });
 });
 
+app.post('/deletedatafromtable', function (req, res) {
+    console.log('deletedataofid:' + req.body.id + ', table:' + req.body.table);
+    
+    var queryString = "delete from " + req.body.table + " where id = " + req.body.id ;
+    
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        res.json('deleted');
+    });
+});
+
