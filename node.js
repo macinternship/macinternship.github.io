@@ -545,7 +545,7 @@ app.post('/viewallcompany', function (req, res) {
         queryString += " and country like '%" + req.body.country + "%'";
     }
 
-    res.json(queryString);
+    // res.json(queryString);
 
     var rows = [];
     var query = baseClient.query(queryString);
@@ -574,7 +574,7 @@ app.post('/viewalljob', function (req, res) {
         queryString += " and country like '%" + req.body.country + "%'";
     }
 
-    res.json(queryString);
+    // res.json(queryString);
     
     var rows = [];
     var query = baseClient.query(queryString);
