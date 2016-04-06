@@ -532,7 +532,8 @@ app.post('/viewstudentworkexperience', function (req, res) {
 app.post('/viewallcompany', function (req, res) {
     console.log('viewallcompany:' + req.body.search);
     
-    var queryString = "SELECT * FROM company;";
+    var queryString = "SELECT * FROM company " +
+    "where companyname is not NULL OR companyname is NULL ";
     
     if(req.body.search.length > 0){
         queryString = "SELECT * FROM company where companyname like '%" + req.body.search +
