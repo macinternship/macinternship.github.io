@@ -561,7 +561,8 @@ app.post('/viewallcompany', function (req, res) {
 app.post('/viewalljob', function (req, res) {
     console.log('viewalljob:' + req.body.search);
     
-    var queryString = "SELECT * FROM job inner join company on job.companyid = company.id;";
+    var queryString = "SELECT * FROM job inner join company on job.companyid = company.id " +
+    "where position is not NULL OR position is NULL ";
     
     if(req.body.search.length > 0){
         queryString = "SELECT * FROM job inner join company on job.companyid = company.id " +
