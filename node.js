@@ -439,9 +439,9 @@ app.post('/showstudents', function (req, res) {
     var queryString = "SELECT distinct on (username) * " + 
     "FROM login inner join student on login.username = student.studentid left join " + 
     " student_job_achieved on student.studentid = student_job_achieved.studentid " +
-    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + " and "
-    hired + " and "
-    salary + " and "
+    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + " and " +
+    hired + " and " +
+    salary + " and " +
     searchQuery;
 
     // res.json(queryString);
