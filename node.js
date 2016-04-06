@@ -415,7 +415,7 @@ app.post('/showstudents', function (req, res) {
     }
     var rows = [];
     //student info
-    var display = req.body.gender == "all"?"(gender like '%')":"(gender = '%" + req.body.gender + "%')";
+    var display = req.body.gender == "all"?"(gender like '%')":"(gender like '%" + req.body.gender + "%')";
     display += " AND ";
     display += req.body.residentstatus == "all"?"(residentstatus like '%')":"(residentstatus = '" + req.body.residentstatus + "')";
     display += " AND ";
@@ -534,11 +534,11 @@ app.post('/viewallcompany', function (req, res) {
     
     var queryString = "SELECT * FROM company where ";
 
-    queryString += req.body.search == "all"?"(companyname like '%')":"(companyname = '%" + req.body.search + "%')";
+    queryString += req.body.search == "all"?"(companyname like '%')":"(companyname like '%" + req.body.search + "%')";
     queryString += " and ";
-    queryString += req.body.city == "all"?"(city like '%')":"(city = '%" + req.body.city + "%')";
+    queryString += req.body.city == "all"?"(city like '%')":"(city like '%" + req.body.city + "%')";
     queryString += " and ";
-    queryString += req.body.country == "all"?"(country like '%')":"(country = '%" + req.body.country + "%')";
+    queryString += req.body.country == "all"?"(country like '%')":"(country like '%" + req.body.country + "%')";
 
     // res.json(queryString);
 
@@ -558,11 +558,11 @@ app.post('/viewalljob', function (req, res) {
     
     var queryString = "SELECT * FROM job inner join company on job.companyid = company.id where ";
     
-    queryString += req.body.search == "all"?"(position like '%')":"(position = '%" + req.body.search + "%')";
+    queryString += req.body.search == "all"?"(position like '%')":"(position like '%" + req.body.search + "%')";
     queryString += " and ";
-    queryString += req.body.city == "all"?"(city like '%')":"(city = '%" + req.body.city + "%')";
+    queryString += req.body.city == "all"?"(city like '%')":"(city like '%" + req.body.city + "%')";
     queryString += " and ";
-    queryString += req.body.country == "all"?"(country like '%')":"(country = '%" + req.body.country + "%')";
+    queryString += req.body.country == "all"?"(country like '%')":"(country like '%" + req.body.country + "%')";
 
     // res.json(queryString);
     
