@@ -628,7 +628,7 @@ app.post('/getfeed', function(req, res) {
     console.log('getfeed:');
 
     var queryString = "select login.id, login.username, photoid, login.type, " +
-    "student.firstname, student.lastname, feed.value  from feed inner join login " +
+    "student.firstname, student.lastname, feed.value, feed.datetime  from feed inner join login " +
     "on feed.studentid = login.username left join student on login.username = " +
     "student.studentid";
 
@@ -637,11 +637,12 @@ app.post('/getfeed', function(req, res) {
     }
 
     queryString += " order by feed.datetime desc";
-    
+
     var rows = [];
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
+        console.log(row.datetime);
     });
     query.on('end', function(result) {
         console.log('viewalljob: ' + result.rowCount + ' rows');
