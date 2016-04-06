@@ -398,7 +398,8 @@ app.post('/showstudents', function (req, res) {
 
     console.log(display)
     var queryString = "SELECT * " + 
-    "FROM student inner join login where login.username = student.studentid and " + display;
+    "FROM student inner join login on login.username = student.studentid where " + display;
+
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
