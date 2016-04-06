@@ -513,7 +513,7 @@ app.post('/viewstudentworkexperience', function (req, res) {
     
    var rows = [];
     var queryString = "SELECT * FROM workexperience inner join company " +
-    "on workexperience.companyid = company.id where studentid = '" + req.body.username + "';";
+    "on cast(workexperience.companyid as int) = company.id where studentid = '" + req.body.username + "';";
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
