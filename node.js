@@ -461,7 +461,7 @@ app.post('/getgpa', function (req, res) {
     console.log('getgpa: ' + req.body.studentids);
     
     var queryString = "select avg(gpa), studentid from education group by " +
-    "studentid having studentid in (" + studentids + ");"
+    "studentid having studentid in (" + studentids + ") and avg(gpa) "+req.body.gpa+");"
 
     // res.json(queryString);
     var query = baseClient.query(queryString);
