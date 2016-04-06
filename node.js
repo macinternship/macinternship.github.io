@@ -609,8 +609,7 @@ app.post('/addsemester', function (req, res) {
         rows.push(row);
     });
     query.on('end', function(result) {
-        console.log('viewalljob: ' + result.rowCount + ' rows');
-        res.json(rows);
+        res.json('added');
     });
 });
 
