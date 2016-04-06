@@ -595,3 +595,22 @@ app.post('/viewallsemester', function (req, res) {
     });
 });
 
+app.post('/addsemester', function (req, res) {
+    console.log('addsemester:' + req.body.semester + ', ' + req.body.year);
+    
+    var queryString = "INSERT INTO semesterregistered (semester, year) values " +
+    "('" + req.body.semester + "','" + req.body.year + "');";
+    
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewalljob: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
