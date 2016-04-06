@@ -476,7 +476,6 @@ app.post('/getgpa', function (req, res) {
     });
 });
 
-
 app.post('/viewstudent', function (req, res) {
     console.log('viewstudent:' + req.body.username);
     
@@ -523,11 +522,6 @@ app.post('/viewstudentworkexperience', function (req, res) {
         res.json(rows);
     });
 });
-
-
-
-
-
 
 app.post('/viewallcompany', function (req, res) {
     console.log('viewallcompany:' + req.body.search);
@@ -630,3 +624,28 @@ app.post('/deletedatafromtable', function (req, res) {
     });
 });
 
+app.post('/getfeed', function(req, res) {
+    console.log('getfeed:');
+
+    var queryString = "select login.id, login.username, photoid, login.type, " +
+    "student.firstname, student.lastname, feed.value  from feed inner join login " +
+    "on feed.studentid = login.username left join student on login.username = " +
+    "student.studentid";
+
+    if(req.body.username != null){
+        queryString += " where login.username = '" + req.body.username +"'";
+    }
+
+    queryString += " order by feed.datetime desc";
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewalljob: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+
+})
