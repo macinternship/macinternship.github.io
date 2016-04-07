@@ -62,6 +62,8 @@
     <!-- jQuery 2.1.4 -->
     <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="dist/js/notify.min.js"></script>
+
     <!-- Bootstrap 3.3.5 -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <!-- iCheck -->
@@ -97,6 +99,7 @@
             window.location.replace("index.html");
           }else{
             console.log('wrong password');
+            $("#password").notify("Wrong Password", { position:"right" });
             $("#password").effect("shake");
           }
         });
