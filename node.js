@@ -656,4 +656,25 @@ app.post('/getfeed', function(req, res) {
         res.json(rows);
     });
 
+});
+
+app.post('/getdashboardinfo', function(req, res) {
+    console.log('getdashboardinfo:');
+
+    var queryString = "select count(*) from company UNION" +
+                        "select count(*) from job UNION" +
+                        "select count(*) from student UNION" +
+                        "select count(*) from semesterregistered;";
+
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+        console.log(row);
+    });
+    query.on('end', function(result) {
+        console.log('getdashboardinfo: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+
 })
