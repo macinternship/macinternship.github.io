@@ -659,10 +659,10 @@ app.post('/getfeed', function(req, res) {
 });
 
 app.post('/getcount', function(req, res) {
-    console.log('getcount:' + req.query.table);
+    console.log('getcount:' + req.body.table);
     var rows = [];
 
-    var queryString = "select count(*) from " + req.query.table;
+    var queryString = "select count(*) from " + req.body.table;
     var query = baseClient.query(queryString);
     
     query.on('row', function(row) {
