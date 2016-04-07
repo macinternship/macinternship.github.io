@@ -699,3 +699,22 @@ app.post('/checkusername', function (req, res) {
         }
     });
 });
+
+
+app.post('/dashboardjob', function (req, res) {
+    console.log('dashboardjob:');
+    
+    var queryString = "SELECT count(*), companyname FROM job inner join company on cast(job.companyid as int) = company.id group by companyname";
+    
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('dashboardjob: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
