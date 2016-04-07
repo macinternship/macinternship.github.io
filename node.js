@@ -662,7 +662,7 @@ app.post('/getcount', function(req, res) {
     console.log('getcount:' + req.query.table);
     var rows = [];
 
-    var queryString1 = "select count(*) from " + req.query.table;
+    var queryString = "select count(*) from " + req.query.table;
     var query = baseClient.query(queryString);
     
     query.on('row', function(row) {
