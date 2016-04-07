@@ -660,20 +660,24 @@ app.post('/getfeed', function(req, res) {
 
 app.post('/getdashboardinfo', function(req, res) {
     console.log('getdashboardinfo:');
-
-    var queryString = "select count(*) from company UNION" +
-                        "select count(*) from job UNION" +
-                        "select count(*) from student UNION" +
-                        "select count(*) from semesterregistered;";
-
     var rows = [];
+
+    var queryString = "select count(*) from company";
     var query = baseClient.query(queryString);
+    queryString = "select count(*) from job";
+    query = baseClient.query(queryString);
+    queryString = "select count(*) from student";
+    query = baseClient.query(queryString);
+    queryString = "select count(*) from semesterregistered";
+    query = baseClient.query(queryString);
+    
     query.on('row', function(row) {
         rows.push(row);
-        console.log(row);
+        // console.log(row);
     });
     query.on('end', function(result) {
         console.log('getdashboardinfo: ' + result.rowCount + ' rows');
+        if(result.rowCount == 4)
         res.json(rows);
     });
 
