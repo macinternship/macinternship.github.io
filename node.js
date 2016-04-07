@@ -718,3 +718,21 @@ app.post('/dashboardjob', function (req, res) {
         res.json(rows);
     });
 });
+
+app.post('/dashboardstudentcountry', function (req, res) {
+    console.log('dashboardstudentcountry:');
+    
+    var queryString = "select count(*), country from student group by country;";
+    
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('dashboardstudentcountry: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});

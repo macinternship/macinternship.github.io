@@ -264,31 +264,14 @@
 
                   <i class="fa fa-map-marker"></i>
                   <h3 class="box-title">
-                    Visitors
+                    Students from Countries
                   </h3>
                 </div>
-                <div class="box-body">
-                  <div id="world-map" style="height: 250px; width: 100%;"></div>
-                </div><!-- /.box-body-->
-                <div class="box-footer no-border">
-                  <div class="row">
-                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                      <div id="sparkline-1"></div>
-                      <div class="knob-label">Visitors</div>
-                    </div><!-- ./col -->
-                    <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
-                      <div id="sparkline-2"></div>
-                      <div class="knob-label">Online</div>
-                    </div><!-- ./col -->
-                    <div class="col-xs-4 text-center">
-                      <div id="sparkline-3"></div>
-                      <div class="knob-label">Exists</div>
-                    </div><!-- ./col -->
-                  </div><!-- /.row -->
-                </div>
+   <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+
               </div>
               <!-- /.box -->
-
+             
               
 
 
@@ -373,45 +356,71 @@
     findcount('semesterregistered');
 
     function getjobstodisplay(){
-      $.post("http://macinternship.herokuapp.com/viewalljob",
+      $.post("http://macinternship.herokuapp.com/dashboardjob",
         {
-          search: 'all',
-          city: 'all',
-          country: 'all'
         },
         function(data, status){
           
-
+          var points = [];
+          for(var i=0; i<data.length; i++){
+            data[i].y=parseInt(data[i].count);
+            data[i].indexLabel=data[i].companyname + " #percent%";
+            data[i].legendText=data[i].companyname ;
+            points.push(data[i]);
+          }
 
           var chart = new CanvasJS.Chart("chartContainer",
-  {
-    title:{
-      text: "Presidential Election Results"
-    },     
-                animationEnabled: true,     
-    data: [
-    {        
-      type: "doughnut",
-      startAngle: 60,                          
-      toolTipContent: "{legendText}: {y} - <strong>#percent% </strong>",          
-      showInLegend: true,
-      dataPoints: [
-        {y: 65899660, indexLabel: "Barack Obama #percent%", legendText: "Barack Obama" },
-        {y: 60929152, indexLabel: "Mitt Romney #percent%", legendText: "Mitt Romney" },
-        {y: 2175850,  indexLabel: "Others #percent%", legendText: "Others" }      
-      ]
-    }
-    ]
-  });
-  chart.render();
+          {
+            title:{
+              text: "Job Postings"
+            },     
+                        animationEnabled: true,     
+            data: [
+            {        
+              type: "doughnut",
+              startAngle: 60,                          
+              toolTipContent: "{legendText}: {y} - <strong>#percent% </strong>",          
+              showInLegend: true,
+              dataPoints: points
+            }
+            ]
+          });
+          chart.render();
 
 
 
           
         });
     }
+    getjobstodisplay();
 
+    function getstudentcountry(){
 
+      var chart = new CanvasJS.Chart("chartContainer2",
+  {
+    animationEnabled: true,
+    title:{
+      text: ""
+    },
+    data: [
+    {
+      type: "column", //change type to bar, line, area, pie, etc
+      dataPoints: [
+        { label: "banana", y: 18 },
+        { label: "orange", y: 29 },
+        { label: "apple",  y: 40 },                                    
+        { label: "mango",  y: 34 },
+        { label: "grape",  y: 24 }
+      ]
+    }
+    ]
+    });
+
+  chart.render();
+
+    }
+
+    getstudentcountry();
 
 
     </script>
