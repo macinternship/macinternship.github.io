@@ -673,4 +673,24 @@ app.post('/getcount', function(req, res) {
         res.json(rows);
     });
 
-})
+});
+
+app.post('/checkusername', function (req, res) {
+    console.log('checkusername:' + req.body.username);
+    
+    var rows = [];
+    var queryString = "SELECT * FROM login where username = '" + req.body.username + "';";
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('checkusername: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        if(result.rowCount > 0){
+            res.json('exists');
+        }else{
+            res.json('unique');
+        }
+    });
+});
