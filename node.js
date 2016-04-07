@@ -658,26 +658,18 @@ app.post('/getfeed', function(req, res) {
 
 });
 
-app.post('/getdashboardinfo', function(req, res) {
-    console.log('getdashboardinfo:');
+app.post('/getcount', function(req, res) {
+    console.log('getcount:' + req.query.table);
     var rows = [];
 
-    var queryString = "select count(*) from company";
+    var queryString1 = "select count(*) from " + req.query.table;
     var query = baseClient.query(queryString);
-    queryString = "select count(*) from job";
-    query = baseClient.query(queryString);
-    queryString = "select count(*) from student";
-    query = baseClient.query(queryString);
-    queryString = "select count(*) from semesterregistered";
-    query = baseClient.query(queryString);
     
     query.on('row', function(row) {
         rows.push(row);
-        // console.log(row);
     });
     query.on('end', function(result) {
-        console.log('getdashboardinfo: ' + result.rowCount + ' rows');
-        if(result.rowCount == 4)
+        console.log('getcount: ' + result.rowCount + ' rows');
         res.json(rows);
     });
 
