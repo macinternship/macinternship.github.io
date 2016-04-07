@@ -642,7 +642,7 @@ app.post('/getfeed', function(req, res) {
         queryString += " where login.username = '" + req.body.username +"'";
     }
 
-    queryString += " order by feed.datetime desc";
+    queryString += " where feed.value != 'logged in' order by feed.datetime desc";
 
     var rows = [];
     var query = baseClient.query(queryString);

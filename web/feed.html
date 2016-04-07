@@ -110,115 +110,31 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Dashboard
+            Feed
             <small>Control panel</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Dashboard</li>
+            <li class="active">Feed</li>
           </ol>
         </section>
 
         <!-- Main content -->
         <section class="content">
-          <!-- Small boxes (Stat box) -->
-          <div class="row">
-            <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-aqua">
-                <div class="inner">
-                  <h3 id="companycount">~</h3>
-                  <p>Companies</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-                <a href="company.html" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-green">
-                <div class="inner">
-                  <h3 id="jobcount">~<sup style="font-size: 20px"></sup></h3>
-                  <p>Jobs</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="job.html" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3 id="studentcount">~</h3>
-                  <p>Students</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-person-add"></i>
-                </div>
-                <a href="student.html" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div><!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-red">
-                <div class="inner">
-                  <h3 id="semesterregisteredcount">~</h3>
-                  <p>Semester Registered</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="semesterregistered.html" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-              </div>
-            </div><!-- ./col -->
-          </div><!-- /.row -->
-          <!-- Main row -->
-          <div class="row">
-            <!-- Left col -->
-            <section class="col-lg-7 connectedSortable">
+          
+
+          <div class="col-md-9">
               <div class="nav-tabs-custom">
-                <!-- Tabs within a box -->
-                <ul class="nav nav-tabs pull-right">
-                  <li class="active">Area</li>
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#activity" data-toggle="tab">Main Feed</a></li>
                 </ul>
-                <div class="tab-content no-padding">
-                  <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                <div class="tab-content">
+                  <div class="active tab-pane" id="activity">
+                    
+                  </div>
                 </div>
-              </div><!-- /.nav-tabs-custom -->
-            
-            </section><!-- /.Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
-            <section class="col-lg-5 connectedSortable">
-
-              <!-- Map box -->
-              <div class="box box-solid bg-light-blue-gradient">
-                <div class="box-header">
-                  <!-- tools box -->
-                  <div class="pull-right box-tools">
-                    <button class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" title="Date range"><i class="fa fa-calendar"></i></button>
-                    <button class="btn btn-primary btn-sm pull-right" data-widget="collapse" data-toggle="tooltip" title="Collapse" style="margin-right: 5px;"><i class="fa fa-minus"></i></button>
-                  </div><!-- /. tools -->
-
-                  <i class="fa fa-map-marker"></i>
-                  <h3 class="box-title">
-                    Students from Countries
-                  </h3>
-                </div>
-                <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
-
               </div>
-              <!-- /.box -->
-             
-              
-
-
-
-            </section><!-- right col -->
-          </div><!-- /.row (main row) -->
+            </div>
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
@@ -274,99 +190,42 @@
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
     <script type="text/javascript">
-    function findcount(object) {
-        
-        $.post("http://macinternship.herokuapp.com/getcount",
-        {
-          table: object
-        },
-        function(data, status){
-          // console.log(data);  
-          $('#' + object + 'count').text(data[0].count)
-          
-        });
-    }
-    findcount('company');
-    findcount('job');
-    findcount('student');
-    findcount('semesterregistered');
-
-    function getjobstodisplay(){
-      $.post("http://macinternship.herokuapp.com/dashboardjob",
-        {
-        },
-        function(data, status){
-          
-          var points = [];
-          for(var i=0; i<data.length; i++){
-            data[i].y=parseInt(data[i].count);
-            data[i].indexLabel=data[i].companyname + " #percent%";
-            data[i].legendText=data[i].companyname ;
-            points.push(data[i]);
-          }
-
-          var chart = new CanvasJS.Chart("chartContainer",
-          {
-            title:{
-              text: "Job Postings"
-            },     
-                        animationEnabled: true,     
-            data: [
-            {        
-              type: "doughnut",
-              startAngle: 60,                          
-              toolTipContent: "{legendText}: {y} - <strong>#percent% </strong>",          
-              showInLegend: true,
-              dataPoints: points
-            }
-            ]
-          });
-          chart.render();
-
-
-
-          
-        });
-    }
-    getjobstodisplay();
-
-    function getstudentcountry(){
-
-      $.post("http://macinternship.herokuapp.com/dashboardstudentcountry",
-        {
-        },
-        function(data, status){
-          
-          var points = [];
-          for(var i=0; i<data.length; i++){
-            data[i].y=parseInt(data[i].count);
-            data[i].label=data[i].country ;
-            points.push(data[i]);
-          }
-        var chart = new CanvasJS.Chart("chartContainer2",
-        {
-          animationEnabled: true,
-          title:{
-            text: ""
-          },
-          data: [
-          {
-            type: "column", //change type to bar, line, area, pie, etc
-            dataPoints: points
-          }
-          ]
-          });
-
-        chart.render();
-      });
-
-    }
-
-    getstudentcountry();
-
     $.get("aside.html", function(data) {
       $("#mainsidebarapp").html(data);
     });
+
+    $.post("http://macinternship.herokuapp.com/getfeed",
+        {
+        },
+        function(data, status){
+
+          for(var i=0; i<data.length; i++){
+
+          var name = data[i].username;
+          if(data[i].type == 'student'){
+            name = data[i].firstname + ' ' + data[i].lastname;
+          }
+          var valueToAppend = '<div class="post">'+
+              '<div class="user-block">'+
+              '<img class="img-circle img-bordered-sm" src="'+
+              data[i].photoid+
+              '" alt="user image">'+
+              '<span class="username">'+
+              '<a href="student.html?'+
+              data[i].username+'">'+
+              name + '</a>'+
+              '</span>'+
+              '<span class="description">'+
+              data[i].newdatetime +
+              '</span>'+
+              '</div>'+
+              '<p>'+
+              data[i].value +
+              '</p>'+
+              '</div>';
+          $("#activity").append(valueToAppend);
+            }
+          });
 
     </script>
 
