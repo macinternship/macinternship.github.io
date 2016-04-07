@@ -219,7 +219,7 @@ app.post('/addcompany', function (req, res) {
     var rows = [];
     var queryString = "INSERT INTO company (photoid, companyname, address, "+
             "city, postalcode, country, contactpersonfirstname, contactpersonlastname, "+
-            "contactpersonposition, telephone, email, companywebsite) VALUES ('" + 
+            "contactpersonposition, telephone, email, type, companywebsite) VALUES ('" + 
     req.body.photoid + "', '" +  
     req.body.companyname + "', '" +  
     req.body.address + "', '" +  
@@ -233,6 +233,7 @@ app.post('/addcompany', function (req, res) {
     req.body.contactpersonposition + "', '" +  
     req.body.telephone + "', '" +  
     req.body.email + "', '" +  
+    req.body.type + "', '" +  
     req.body.companywebsite + "');";
 
     var query = baseClient.query(queryString);
@@ -244,10 +245,9 @@ app.post('/addinternship', function (req, res) {
     insertFeed(req.body.username, 'added new internship');
 
     var rows = [];
-    var queryString = "INSERT INTO internship (studentid, type, companyid, "+
+    var queryString = "INSERT INTO internship (studentid, companyid, "+
             "notes) VALUES ('" + 
     req.body.username + "', '" +  
-    req.body.type + "', '" +  
     req.body.companyid + "', '" +  
     req.body.notes + "');";
 

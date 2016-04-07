@@ -23,7 +23,6 @@ internshipstatus TEXT);
 create table internship (
 id SERIAL PRIMARY KEY,
 studentid TEXT,
-type TEXT,
 companyid TEXT,
 notes TEXT);
 
@@ -50,6 +49,7 @@ contactpersonlastname TEXT,
 contactpersonposition TEXT,
 telephone TEXT,
 email TEXT,
+type TEXT,
 companywebsite TEXT);
 
 create table student_job_achieved (
