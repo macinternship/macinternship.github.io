@@ -593,8 +593,8 @@ app.post('/viewalljob', function (req, res) {
     });
 });
 
-app.post('/viewjobbyid', function (req, res) {
-    console.log('viewjobbyid:' + req.body.id);
+app.post('/viewjobcompanybyid', function (req, res) {
+    console.log('viewjobcompanybyid:' + req.body.id);
     
     var queryString = "SELECT job.id as jobid, * FROM job inner join company on cast(job.companyid as int) = company.id where ";
     queryString += " company.id = " + req.body.id;
@@ -605,7 +605,7 @@ app.post('/viewjobbyid', function (req, res) {
         rows.push(row);
     });
     query.on('end', function(result) {
-        console.log('viewjobbyid: ' + result.rowCount + ' rows');
+        console.log('viewjobcompanybyid: ' + result.rowCount + ' rows');
         res.json(rows);
     });
 });

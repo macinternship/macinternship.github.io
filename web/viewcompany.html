@@ -304,62 +304,41 @@
     
 
     function getjobsbycompanyid(id){
-      $.post("http://macinternship.herokuapp.com/viewjobbyid",
+      $.post("http://macinternship.herokuapp.com/viewjobcompanybyid",
         {
           id: id
         },
         function(data, status){
           $("#tableentry").empty();
-          var uniqueValuesCity = [];
-          var uniqueValuesCountry = [];
           for(var i=0; i<data.length; i++){
             var valueToAppend = '<tr><td>'+
-                '<center><img src="'+
-                data[i].photoid +
-                '" class="user-image" alt="User Image" style="height: 50px;">'+
-                '</center></td><td>'+
+                '<center></center></td><td>'+
                 '<a href="viewjob.html?id='+
-                data[i].id+
+                data[i].jobid+
                 '">'+
-                toTitleCase(data[i].companyname)+
+                toTitleCase(data[i].position)+
                 '</a></td><td>'+
-                toTitleCase(data[i].city)+
+                toTitleCase(data[i].description)+
                 '</td><td>'+
-                toTitleCase(data[i].country)+
+                toTitleCase(data[i].salary)+
                 '</td><td>'+
-                '<a href="http://'+
-                  data[i].companywebsite+
-                '" '+
-                'target="_blank">'+
-                data[i].companywebsite+
-                '</a></td><td>'+
+                 data[i].availability+
+                '</td><td>'+
                 '<img src="dist/img/delete.png" height="20px" width="20px"'+
-                'rowid="'+data[i].id+'" '+
-                'rowname="'+data[i].companyname+'" '+
-                'table="company"'+
+                'rowid="'+data[i].jobid+'" '+
+                'rowname="'+data[i].position+'" '+
+                'table="job"'+
                 ' onclick="deleteimagetap(this)" />'+
                 '</td></tr>'
              $("#tableentry").append(valueToAppend);
 
-             if(init == 'yes'){
-              uniqueValuesCity.push(data[i].city);
-              uniqueValuesCountry.push(data[i].country);
-
-             }
-          }
-
-          
+             }          
       });
     }
 
     getjobsbycompanyid(id);
     
 
-
-    <th width="15%">Position</th>
-                          <th width="15%">Description</th>
-                          <th width="15%">Salary</th>
-                          <th width="15%">Availability</th>
 
 
 
