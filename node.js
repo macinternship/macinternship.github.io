@@ -593,6 +593,23 @@ app.post('/viewalljob', function (req, res) {
     });
 });
 
+app.post('/viewjobbyid', function (req, res) {
+    console.log('viewjobbyid:' + req.body.id);
+    
+    var queryString = "SELECT * FROM job inner join company on cast(job.companyid as int) = company.id where ";
+    queryString += " company.id = " + req.body.id;
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewjobbyid: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
 app.post('/viewallsemester', function (req, res) {
     console.log('viewallsemester:');
     
