@@ -572,7 +572,7 @@ app.post('/viewcompanybyid', function (req, res) {
 app.post('/viewalljob', function (req, res) {
     console.log('viewalljob:' + req.body.search);
     
-    var queryString = "SELECT * FROM job inner join company on cast(job.companyid as int) = company.id where ";
+    var queryString = "SELECT job.id as jobid, * FROM job inner join company on cast(job.companyid as int) = company.id where ";
     
     queryString += req.body.search == "all"?"(position like '%')":"(position like '%" + req.body.search + "%')";
     queryString += " and ";
@@ -596,7 +596,7 @@ app.post('/viewalljob', function (req, res) {
 app.post('/viewjobbyid', function (req, res) {
     console.log('viewjobbyid:' + req.body.id);
     
-    var queryString = "SELECT * FROM job inner join company on cast(job.companyid as int) = company.id where ";
+    var queryString = "SELECT job.id as jobid, * FROM job inner join company on cast(job.companyid as int) = company.id where ";
     queryString += " company.id = " + req.body.id;
     
     var rows = [];

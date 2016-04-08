@@ -177,10 +177,10 @@
                     <thead>
                       <tr>
                           <th width="15%"></th>
-                          <th width="15%">Name</th>
-                          <th width="15%">City</th>
-                          <th width="15%">Country</th>
-                          <th width="15%">Website</th>
+                          <th width="15%">Position</th>
+                          <th width="15%">Description</th>
+                          <th width="15%">Salary</th>
+                          <th width="15%">Availability</th>
                           <th width="10%"></th>
                       </tr>
                     </thead>
@@ -302,6 +302,67 @@
     var id = getUrlVars()["id"];
     getcompanydetails(id);
     
+
+    function getjobsbycompanyid(id){
+      $.post("http://macinternship.herokuapp.com/viewjobbyid",
+        {
+          id: id
+        },
+        function(data, status){
+          $("#tableentry").empty();
+          var uniqueValuesCity = [];
+          var uniqueValuesCountry = [];
+          for(var i=0; i<data.length; i++){
+            var valueToAppend = '<tr><td>'+
+                '<center><img src="'+
+                data[i].photoid +
+                '" class="user-image" alt="User Image" style="height: 50px;">'+
+                '</center></td><td>'+
+                '<a href="viewjob.html?id='+
+                data[i].id+
+                '">'+
+                toTitleCase(data[i].companyname)+
+                '</a></td><td>'+
+                toTitleCase(data[i].city)+
+                '</td><td>'+
+                toTitleCase(data[i].country)+
+                '</td><td>'+
+                '<a href="http://'+
+                  data[i].companywebsite+
+                '" '+
+                'target="_blank">'+
+                data[i].companywebsite+
+                '</a></td><td>'+
+                '<img src="dist/img/delete.png" height="20px" width="20px"'+
+                'rowid="'+data[i].id+'" '+
+                'rowname="'+data[i].companyname+'" '+
+                'table="company"'+
+                ' onclick="deleteimagetap(this)" />'+
+                '</td></tr>'
+             $("#tableentry").append(valueToAppend);
+
+             if(init == 'yes'){
+              uniqueValuesCity.push(data[i].city);
+              uniqueValuesCountry.push(data[i].country);
+
+             }
+          }
+
+          
+      });
+    }
+
+    getjobsbycompanyid(id);
+    
+
+
+    <th width="15%">Position</th>
+                          <th width="15%">Description</th>
+                          <th width="15%">Salary</th>
+                          <th width="15%">Availability</th>
+
+
+
 
 $(document).ready(function() {
   $('table.highchart').highchartTable();
