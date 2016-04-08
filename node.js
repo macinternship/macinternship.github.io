@@ -553,6 +553,22 @@ app.post('/viewallcompany', function (req, res) {
     });
 });
 
+app.post('/viewcompanybyid', function (req, res) {
+    console.log('viewcompanybyid:' + req.body.id);
+    
+    var queryString = "SELECT * FROM company where id=" + req.body.id;
+
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewallcompany: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
 app.post('/viewalljob', function (req, res) {
     console.log('viewalljob:' + req.body.search);
     
