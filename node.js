@@ -769,3 +769,37 @@ app.post('/dashboardstudentcountry', function (req, res) {
         res.json(rows);
     });
 });
+
+app.post('/viewstudentachievedbyjobid', function (req, res) {
+    console.log('viewstudentachievedbyjobid:' + req.body.id);
+    
+    var queryString = "select * from student_job_achieved inner join job on cast(student_job_achieved.jobid as int) = job.id where ";
+    queryString += " company.jobid = " + req.body.id;
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudentachievedbyjobid: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/viewstudentinterestbyjobid', function (req, res) {
+    console.log('viewstudentinterestbyjobid:' + req.body.id);
+    
+    var queryString = "select * from student_job_interest inner join job on cast(student_job_achieved.jobid as int) = job.id where ";
+    queryString += " company.jobid = " + req.body.id;
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudentinterestbyjobid: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});

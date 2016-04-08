@@ -95,6 +95,10 @@
           </div>
         </nav>
       </header>
+     
+
+
+
 
       <!-- Left side column. contains the logo and sidebar -->
       <aside class="main-sidebar" id="mainsidebarapp">
@@ -105,50 +109,69 @@
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          <h1>
-            Company
-            <small>Control panel</small>
+          <h1 id="companyname1">
+            
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Company</li>
+            <li >Company</li>
+            <li class="active">Job</li>
           </ol>
+
         </section>
 
-        <!-- Main content -->
         <section class="content">
-          
 
-          <div class="col-md-12">
+        <!-- Main content -->
+          <div class="row">
+            <div class="col-md-3">
+
+              <!-- Profile Image -->
+              <div class="box box-primary">
+                <div class="box-body box-profile">
+                  <img id="companyphoto1" class="profile-user-img img-responsive img-circle" src="dist/img/user2-160x160.jpg" alt="User profile picture">
+                  <h3 class="profile-username text-center" id="companyname2"></h3>
+                  <p class="text-muted text-center" id="companytype1"></p>
+
+                  <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                      <b>Position</b> <a class="pull-right" id="position"></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Description</b> <a class="pull-right" id="description"></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Responsibilities</b> <a class="pull-right" id="responsibilities"></a>
+                    </li>
+
+                    <li class="list-group-item">
+                      <b>salary</b> <a class="pull-right" id="salary"></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Availability</b> <a class="pull-right" id="availability">></a>
+                    </li>
+                  </ul>
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+
+            </div><!-- /.col -->
+            <div class="col-md-9">
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a data-toggle="tab">Companies</a></li>
-                  <li>
-                    <a data-toggle="tab">
-                        City: <select id="cityfield" onchange="fieldchanged()">
-                        <option value="all">all</option>
-                      </select>
-                    </a>
-                  </li>
-                  <li>
-                    <a data-toggle="tab">
-                      Country: <select id="countryfield" onchange="fieldchanged()">
-                        <option value="all">all</option>
-                      </select>
-                    </a>
-                  </li>
+                  <li class="active"><a href="#activity" data-toggle="tab">Job Offered to Students</a></li>
                 </ul>
                 <div class="tab-content">
-                  <div class="active tab-pane" id="company">
-                    
-                    <table class="highchart" data-graph-container-before="1" data-graph-type="column" width="100%">
+                  	<div class="active tab-pane" id="activity">
+
+                  	<table class="highchart" data-graph-container-before="1" data-graph-type="column" width="100%">
                     <thead>
                       <tr>
                           <th width="15%"></th>
-                          <th width="15%">Name</th>
-                          <th width="15%">City</th>
-                          <th width="15%">Country</th>
-                          <th width="15%">Website</th>
+                          <th width="15%">Position</th>
+                          <th width="15%">Description</th>
+                          <th width="15%">Salary</th>
+                          <th width="15%">Availability</th>
                           <th width="10%"></th>
                       </tr>
                     </thead>
@@ -164,11 +187,15 @@
                     </tbody>
                     </table>
 
+                  	</div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+              </div><!-- /.nav-tabs-custom -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
 
-                  </div>
-                </div>
-              </div>
-            </div>
+
+
+
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
@@ -236,78 +263,76 @@
     });
 
     
-    function getjobs(search, city, country, init){
-      $.post("http://macinternship.herokuapp.com/viewallcompany",
+    function getcompanydetails(id){
+      $.post("http://macinternship.herokuapp.com/viewcompanybyid",
         {
-          search: search,
-          city: city,
-          country: country
+          id: id,
+        },
+        function(data, status){
+          	console.log(data)
+
+          	$('#companyaddress').text(data[0].address);
+          	$('#companycity').text(data[0].city);
+          	$('#companypostalcode').text(data[0].postalcode);
+          	$('#companycontactpersonname').text(data[0].contactpersonfirstname + ' ' +data[0].contactpersonlastname);
+          	$('#companycontactpersonposition').text(toTitleCase(data[0].contactpersonposition));
+			$('#companytelephone').text(data[0].telephone);
+			$('#companyemail').text(data[0].email);
+			$('#companywebsite').text(data[0].companywebsite);
+
+			$('#companyname1').text(toTitleCase(data[0].companyname));
+			$('#companyname2').text(toTitleCase(data[0].companyname));
+			$('#companytype1').text(toTitleCase(data[0].type));
+
+			$('#companyphoto1').attr('src', data[0].photoid);
+			
+			
+
+      });
+    }
+    var id = getUrlVars()["id"];
+    getcompanydetails(id);
+    
+
+    function getjobsbycompanyid(id){
+      $.post("http://macinternship.herokuapp.com/viewjobcompanybyid",
+        {
+          id: id
         },
         function(data, status){
           $("#tableentry").empty();
-          var uniqueValuesCity = [];
-          var uniqueValuesCountry = [];
           for(var i=0; i<data.length; i++){
             var valueToAppend = '<tr><td>'+
-                '<center><img src="'+
-                data[i].photoid +
-                '" class="user-image" alt="User Image" style="height: 50px;">'+
-                '</center></td><td>'+
-                '<a href="viewcompany.html?id='+
-                data[i].id+
+                '<center></center></td><td>'+
+                '<a href="viewjob.html?id='+
+                data[i].jobid+
                 '">'+
-                toTitleCase(data[i].companyname)+
+                toTitleCase(data[i].position)+
                 '</a></td><td>'+
-                toTitleCase(data[i].city)+
+                toTitleCase(data[i].description)+
                 '</td><td>'+
-                toTitleCase(data[i].country)+
+                toTitleCase(data[i].salary)+
                 '</td><td>'+
-                '<a href="http://'+
-                  data[i].companywebsite+
-                '" '+
-                'target="_blank">'+
-                data[i].companywebsite+
-                '</a></td><td>'+
+                 data[i].availability+
+                '</td><td>'+
                 '<img src="dist/img/delete.png" height="20px" width="20px"'+
-                'rowid="'+data[i].id+'" '+
-                'rowname="'+data[i].companyname+'" '+
-                'table="company"'+
+                'rowid="'+data[i].jobid+'" '+
+                'rowname="'+data[i].position+'" '+
+                'table="job"'+
                 ' onclick="deleteimagetap(this)" />'+
                 '</td></tr>'
              $("#tableentry").append(valueToAppend);
 
-             if(init == 'yes'){
-              uniqueValuesCity.push(data[i].city);
-              uniqueValuesCountry.push(data[i].country);
-
-             }
-          }
-
-          if(init == 'yes'){
-            var uniqueValuesCityNew = uniqueValuesCity.filter( onlyUnique );
-            var uniqueValuesCountryNew = uniqueValuesCountry.filter( onlyUnique );
-            
-            var daySelectCity = document.getElementById('cityfield');
-            var daySelectCountry = document.getElementById('countryfield');
-            for(var i=0; i<uniqueValuesCityNew.length;i++)
-            daySelectCity.options[daySelectCity.options.length] = 
-              new Option(toTitleCase(uniqueValuesCityNew[i]), uniqueValuesCityNew[i]);
-            for(var i=0; i<uniqueValuesCountryNew.length;i++)
-            daySelectCountry.options[daySelectCountry.options.length] = 
-              new Option(toTitleCase(uniqueValuesCountryNew[i]), uniqueValuesCountryNew[i]);
-          }
+             }          
       });
     }
 
-    getjobs('all', 'all', 'all', 'yes');
+    getjobsbycompanyid(id);
     
-    function fieldchanged(){
-      var e1 = document.getElementById("cityfield");
-      var strUser1 = e1.options[e1.selectedIndex].value;
-      var e2 = document.getElementById("countryfield");
-      var strUser2 = e2.options[e2.selectedIndex].value;
-      getjobs('all', strUser1, strUser2, 'no');
-    }
+
+
+
+
 
 $(document).ready(function() {
   $('table.highchart').highchartTable();

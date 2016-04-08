@@ -21,3 +21,31 @@ function getUrlVars()
     }
     return vars;
 }
+function deleteimagetap(that){
+      localStorage.rowidtodelete = that.getAttribute("rowid");
+      localStorage.rownametodelete = that.getAttribute("rowname");
+      localStorage.tabletodelete = that.getAttribute("table");
+
+      swal({   title: "Do you really want to delete "+
+        localStorage.rownametodelete + " (id: " +
+        localStorage.rowidtodelete + ") from "+
+        localStorage.tabletodelete,   showCancelButton: true,   
+        closeOnConfirm: false,   animation: "slide-from-top"}, 
+        function(inputValue){   
+          if (inputValue === false) 
+            return false;      
+          
+          //send post call  
+          $.post("http://macinternship.herokuapp.com/deletedatafromtable",
+          {
+            id: localStorage.rowidtodelete,
+            table: localStorage.tabletodelete
+          },
+          function(data, status){  
+            swal("Deleted!", localStorage.rownametodelete +
+              " was deleted"); 
+            setTimeout(function(){ location.reload(); }, 3000);
+            
+          });
+        });
+    }
