@@ -237,7 +237,7 @@
 
     
     function getjobs(search, city, country, init){
-      $.post("http://macinternship.herokuapp.com/viewallcompany",
+      $.post(HOST + "/viewallcompany",
         {
           search: search,
           city: city,

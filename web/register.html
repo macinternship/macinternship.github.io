@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<script src="util.js"></script>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,7 +86,7 @@
         e.preventDefault();
     });
     function doregister() {
-      $.post("http://macinternship.herokuapp.com/createaccount",
+      $.post(HOST + "/createaccount",
         {
           username: $('#username').val(),
           password: $('#password').val(),
@@ -106,7 +107,7 @@
     }
     $("#username").focusout(function(){
       console.log('sdfsdf')
-      $.post("http://macinternship.herokuapp.com/checkusername",
+      $.post(HOST + "/checkusername",
         {
           username: $('#username').val()
         },

@@ -145,7 +145,7 @@
                     </li>
 
                     <li class="list-group-item">
-                      <b>salary</b> <a class="pull-right" id="salary"></a>
+                      <b>Salary</b> <a class="pull-right" id="salary"></a>
                     </li>
                     <li class="list-group-item">
                       <b>Availability</b> <a class="pull-right" id="availability">></a>
@@ -168,10 +168,10 @@
                     <thead>
                       <tr>
                           <th width="15%"></th>
-                          <th width="15%">Position</th>
-                          <th width="15%">Description</th>
-                          <th width="15%">Salary</th>
-                          <th width="15%">Availability</th>
+                          <th width="15%">Name</th>
+                          <th width="15%">Country</th>
+                          <th width="15%">Gender</th>
+                          <th width="15%">Student ID</th>
                           <th width="10%"></th>
                       </tr>
                     </thead>
@@ -264,28 +264,25 @@
 
     
     function getcompanydetails(id){
-      $.post("http://macinternship.herokuapp.com/viewcompanybyid",
+      $.post(HOST + "/viewjobbyid",
         {
           id: id,
         },
         function(data, status){
           	console.log(data)
 
-          	$('#companyaddress').text(data[0].address);
-          	$('#companycity').text(data[0].city);
-          	$('#companypostalcode').text(data[0].postalcode);
-          	$('#companycontactpersonname').text(data[0].contactpersonfirstname + ' ' +data[0].contactpersonlastname);
-          	$('#companycontactpersonposition').text(toTitleCase(data[0].contactpersonposition));
-			$('#companytelephone').text(data[0].telephone);
-			$('#companyemail').text(data[0].email);
-			$('#companywebsite').text(data[0].companywebsite);
+          	$('#position').text(toTitleCase(data[0].position));
+          	$('#description').text(data[0].description);
+          	$('#responsibilities').text(data[0].responsibilities);
+          	$('#requirements').text(data[0].requirements);
+          	$('#salary').text(data[0].salary);
+			      $('#availability').text(data[0].availability);
 
-			$('#companyname1').text(toTitleCase(data[0].companyname));
-			$('#companyname2').text(toTitleCase(data[0].companyname));
-			$('#companytype1').text(toTitleCase(data[0].type));
+            $('#companyname1').text(toTitleCase(data[0].companyname));
+            $('#companyname2').text(toTitleCase(data[0].companyname));
+            $('#companytype1').text(toTitleCase(data[0].type));
 
-			$('#companyphoto1').attr('src', data[0].photoid);
-			
+            $('#companyphoto1').attr('src', data[0].photoid);
 			
 
       });
@@ -294,8 +291,14 @@
     getcompanydetails(id);
     
 
-    function getjobsbycompanyid(id){
-      $.post("http://macinternship.herokuapp.com/viewjobcompanybyid",
+                          // <th width="15%">Name</th>
+                          // <th width="15%">Country</th>
+                          // <th width="15%">Gender</th>
+                          // <th width="15%">Student ID</th>
+                          // <th width="10%"></th>
+
+    function getstudentachievedbyjobid(id){
+      $.post(HOST + "/viewstudentachievedbyjobid",
         {
           id: id
         },
@@ -304,21 +307,21 @@
           for(var i=0; i<data.length; i++){
             var valueToAppend = '<tr><td>'+
                 '<center></center></td><td>'+
-                '<a href="viewjob.html?id='+
-                data[i].jobid+
+                '<a href="viewstudent.html?id='+
+                data[i].studentid+
                 '">'+
-                toTitleCase(data[i].position)+
+                toTitleCase(data[i].firstname + ' ' + data[i].lastname)+
                 '</a></td><td>'+
-                toTitleCase(data[i].description)+
+                toTitleCase(data[i].country)+
                 '</td><td>'+
-                toTitleCase(data[i].salary)+
+                toTitleCase(data[i].gender)+
                 '</td><td>'+
-                 data[i].availability+
+                 data[i].studentid+
                 '</td><td>'+
                 '<img src="dist/img/delete.png" height="20px" width="20px"'+
-                'rowid="'+data[i].jobid+'" '+
-                'rowname="'+data[i].position+'" '+
-                'table="job"'+
+                'rowid="'+data[i].id+'" '+
+                'rowname="'+data[i].firstname+'" '+
+                'table="student_job_achieved"'+
                 ' onclick="deleteimagetap(this)" />'+
                 '</td></tr>'
              $("#tableentry").append(valueToAppend);
@@ -327,7 +330,7 @@
       });
     }
 
-    getjobsbycompanyid(id);
+    getstudentachievedbyjobid(id);
     
 
 

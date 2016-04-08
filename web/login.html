@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<script src="util.js"></script>
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -83,7 +85,7 @@
     });
     function dologin() {
         
-        $.post("http://macinternship.herokuapp.com/login",
+        $.post(HOST + "/login",
         {
           username: $('#username').val(),
           password: $('#password').val()

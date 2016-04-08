@@ -1,3 +1,4 @@
+HOST = "http://macinternship.herokuapp.com";
 if(localStorage.username == undefined){
 	window.location.replace("login.html");
 }
@@ -36,7 +37,7 @@ function deleteimagetap(that){
             return false;      
           
           //send post call  
-          $.post("http://macinternship.herokuapp.com/deletedatafromtable",
+          $.post(HOST + "/deletedatafromtable",
           {
             id: localStorage.rowidtodelete,
             table: localStorage.tabletodelete

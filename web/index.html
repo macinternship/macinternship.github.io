@@ -276,7 +276,7 @@
     <script type="text/javascript">
     function findcount(object) {
         
-        $.post("http://macinternship.herokuapp.com/getcount",
+        $.post(HOST + "/getcount",
         {
           table: object
         },
@@ -292,7 +292,7 @@
     findcount('semesterregistered');
 
     function getjobstodisplay(){
-      $.post("http://macinternship.herokuapp.com/dashboardjob",
+      $.post(HOST + "/dashboardjob",
         {
         },
         function(data, status){
@@ -332,7 +332,7 @@
 
     function getstudentcountry(){
 
-      $.post("http://macinternship.herokuapp.com/dashboardstudentcountry",
+      $.post(HOST + "/dashboardstudentcountry",
         {
         },
         function(data, status){
