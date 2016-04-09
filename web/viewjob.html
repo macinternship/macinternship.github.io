@@ -269,7 +269,7 @@
           id: id,
         },
         function(data, status){
-          	console.log(data)
+          	// console.log(data)
 
           	$('#position').text(toTitleCase(data[0].position));
           	$('#description').text(data[0].description);
@@ -291,22 +291,20 @@
     getcompanydetails(id);
     
 
-                          // <th width="15%">Name</th>
-                          // <th width="15%">Country</th>
-                          // <th width="15%">Gender</th>
-                          // <th width="15%">Student ID</th>
-                          // <th width="10%"></th>
-
     function getstudentachievedbyjobid(id){
       $.post(HOST + "/viewstudentachievedbyjobid",
         {
           id: id
         },
         function(data, status){
+          console.log(data);
           $("#tableentry").empty();
           for(var i=0; i<data.length; i++){
             var valueToAppend = '<tr><td>'+
-                '<center></center></td><td>'+
+            '<center><img src="'+
+                data[i].photoid +
+                '" class="user-image" alt="User Image" style="height: 50px;">'+
+                '</center></td><td>'+
                 '<a href="viewstudent.html?id='+
                 data[i].studentid+
                 '">'+
@@ -330,7 +328,7 @@
       });
     }
 
-    // getstudentachievedbyjobid(id);
+    getstudentachievedbyjobid(id);
     
 
 

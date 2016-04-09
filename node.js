@@ -24,7 +24,7 @@ console.log("Listening on %d", port)
 
 var baseClient;
 pg.connect(process.env.DATABASE_URL, function(err, client) {
-	baseClient = client;
+    baseClient = client;
 });
 var that = this;
 
@@ -40,15 +40,15 @@ app.post('/login', function (req, res) {
     insertFeed(req.body.username, 'logged in');
     var rows = [];
     var queryString = "SELECT * FROM login where username = '" + req.body.username + "' and password='" + req.body.password + "';";
-	var query = baseClient.query(queryString);
-	query.on('row', function(row) {
-		rows.push(row);
-	});
-	query.on('end', function(result) {
-	    console.log('login: ' + result.rowCount + ' rows');
-	    // console.log(rows);
-		res.json(rows);
-	});
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('login: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        res.json(rows);
+    });
 });
 
 app.post('/updatepassword', function (req, res) {
@@ -790,7 +790,7 @@ app.post('/dashboardstudentcountry', function (req, res) {
 app.post('/viewstudentachievedbyjobid', function (req, res) {
     console.log('viewstudentachievedbyjobid:' + req.body.id);
     
-    var queryString = "select * from student_job_achieved inner join job on cast(student_job_achieved.jobid as int) = job.id where ";
+    var queryString = "select * from student inner join student_job_achieved on cast(student.studentid as int) = cast(student_job_achieved.studentid as int) inner join job on cast(student_job_achieved.jobid as int) = job.id where ";
     queryString += " job.id = " + req.body.id;
     
     var rows = [];
@@ -807,7 +807,7 @@ app.post('/viewstudentachievedbyjobid', function (req, res) {
 app.post('/viewstudentinterestbyjobid', function (req, res) {
     console.log('viewstudentinterestbyjobid:' + req.body.id);
     
-    var queryString = "select * from student_job_interest inner join job on cast(student_job_interest.jobid as int) = job.id where ";
+    var queryString = "select * from student inner join student_job_interest on cast(student.studentid as int) = cast(student_job_interest.studentid as int) inner join job on cast(student_job_interest.jobid as int) = job.id where ";
     queryString += " job.id = " + req.body.id;
     
     var rows = [];
