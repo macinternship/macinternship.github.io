@@ -147,14 +147,14 @@
                       <b>Contact Person</b> <a class="pull-right" id="companycontactpersonname"></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Contact Position</b> <a class="pull-right" id="companycontactpersonposition">></a>
+                      <b>Contact Position</b> <a class="pull-right" id="companycontactpersonposition"></a>
                     </li>
                     <li class="list-group-item">
-                      <b>Telephone</b> <a class="pull-right" id="companytelephone">></a>
+                      <b>Telephone</b> <a class="pull-right" id="companytelephone"></a>
                     </li>
 
                     <li class="list-group-item">
-                      <b>Email</b> <a class="pull-right" id="companyemail">></a>
+                      <b>Email</b> <a class="pull-right" id="companyemail"></a>
                     </li>
                     <li class="list-group-item">
                       <b>Website</b> <a class="pull-right" id="companywebsite"></a>
@@ -278,7 +278,7 @@
           id: id,
         },
         function(data, status){
-          	console.log(data)
+          	// console.log(data)
 
           	$('#companyaddress').text(data[0].address);
           	$('#companycity').text(data[0].city);
