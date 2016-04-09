@@ -420,6 +420,7 @@ app.post('/showstudents', function (req, res) {
             "(lastname like '%" + req.body.search + "%')";
     }
     var rows = [];
+    var studentids = '';
     //student info
     var display = req.body.gender == "all"?"(gender like '%')":"(gender like '%" + req.body.gender + "%')";
     display += " AND ";
@@ -442,7 +443,7 @@ app.post('/showstudents', function (req, res) {
     //salary
     var salary = req.body.salary == "all"?"(salary is NOT NULL OR salary is NULL)":"(cast(salary as int) " + req.body.salary + ")";
 
-    var queryString = "SELECT distinct on (username) * " + 
+    var queryString = "SELECT distinct on (student.id) student.id " + 
     "FROM login inner join student on login.username = student.studentid left join " + 
     " student_job_achieved on student.studentid = student_job_achieved.studentid " +
     "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + " and " +
@@ -454,13 +455,59 @@ app.post('/showstudents', function (req, res) {
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
+        studentids += "'" + row.id + "',";
     });
     query.on('end', function(result) {
         console.log('showstudents: ' + result.rowCount + ' rows');
         // console.log(rows);
-        res.json(rows);
+        studentids = studentids.substring(0, studentids.length-1);
+        // res.json(studentids);
+        if(req.body.gpa == 'all'){
+            //send student details
+            showStudents(studentids, res);
+
+        }else{
+            var queryString = "select student.id from education "+
+                "inner join student on cast(student.studentid as int) = "+
+                "cast(education.studentid as int) group by " +
+                "student.id having student.id in (" + studentids + ") and avg(gpa) "+req.body.gpa+";"
+            var studentidsNew ='';
+            var rows = [];
+            // res.json(queryString);
+            var query2 = baseClient.query(queryString);
+            query2.on('row', function(row) {
+                // rows.push(row);
+                studentidsNew += "'" + row.id + "',";
+            });
+            query2.on('end', function(result) {
+                console.log('getgpa: ' + result.rowCount + ' rows');
+                console.log(studentidsNew);
+                studentidsNew = studentidsNew.substring(0, studentidsNew.length-1);
+                showStudents(studentidsNew, res);
+            });
+        }
     });
 });
+
+function showStudents(studentids, res){
+    var queryString = "select login.photoid, "+
+        "student.firstname, student.internshipstatus,"+
+        "student.lastname, student.residentstatus, student.country, student.gender, "+
+        "student.studentid from login inner join student on "+
+        "cast(login.username as int) = cast(student.studentid as int)"+
+        " where student.id in(" + studentids + ");"
+    var rows = [];
+    // res.json(queryString);
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('selectstudent: ' + result.rowCount + ' rows');
+        // console.log(rows);
+        res.json(rows);
+    });
+}
 
 //average gpa
 app.post('/getgpa', function (req, res) {
@@ -838,18 +885,17 @@ app.post('/viewstudentinterestbyjobid', function (req, res) {
 });
 
 app.post('/viewstudentachievedbystudentid', function (req, res) {
-    console.log('viewstudentachievedbystudentid:' + req.body.studentid);
+    console.log('viewstudentachievedbystudentid:' + req.body.username);
     
-    var queryString = "select student_job_achieved.id, login.photoid, "+
-    "student.firstname, "+
-    "student.lastname, student.country, student.gender, "+
-    "student.studentid from login inner join student on "+
+    var queryString = "select student_job_achieved.id as superid, * "+
+    "from login inner join student on "+
     "cast(login.username as int) = cast(student.studentid as int) "+
     "inner join student_job_achieved on cast(student.studentid as int) "+
     "= cast(student_job_achieved.studentid as int) inner join job on "+
     "cast(student_job_achieved.jobid as int) = job.id "+
+    "inner join company on company.id = cast(job.companyid as int) "+
     "where ";
-    queryString += " student.studentid = " + req.body.studentid;
+    queryString += " cast(student.studentid as int) = " + req.body.username;
     
     var rows = [];
     var query = baseClient.query(queryString);
@@ -863,18 +909,17 @@ app.post('/viewstudentachievedbystudentid', function (req, res) {
 });
 
 app.post('/viewstudentinterestbystudentid', function (req, res) {
-    console.log('viewstudentinterestbystudentid:' + req.body.studentid);
+    console.log('viewstudentinterestbystudentid:' + req.body.username);
     
-    var queryString = "select student_job_interest.id, login.photoid, "+
-    "student.firstname, "+
-    "student.lastname, student.country, student.gender, "+
-    "student.studentid from login inner join student on "+
+    var queryString = "select student_job_interest.id as superid, * "+
+    "from login inner join student on "+
     "cast(login.username as int) = cast(student.studentid as int) "+
     "inner join student_job_interest on cast(student.studentid as int) "+
     "= cast(student_job_interest.studentid as int) inner join job on "+
     "cast(student_job_interest.jobid as int) = job.id "+
+    "inner join company on company.id = cast(job.companyid as int) "+
     "where ";
-    queryString += " student.studentid = " + req.body.studentid;
+    queryString += " cast(student.studentid as int) = " + req.body.username;
     
     var rows = [];
     var query = baseClient.query(queryString);
