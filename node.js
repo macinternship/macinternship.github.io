@@ -541,8 +541,11 @@ app.post('/viewstudent', function (req, res) {
     console.log('viewstudent:' + req.body.username);
     
    var rows = [];
-    var queryString = "SELECT * FROM student inner join semesterregistered on " +
-    "cast(student.semesterregistered as int) = semesterregistered.id where studentid = '" + req.body.username + "';";
+    var queryString = "SELECT login.photoid, student.*, "+
+    "semesterregistered.* FROM login inner join student on "+
+    "login.username = student.studentid inner join semesterregistered "+
+    "on cast(student.semesterregistered as int) = semesterregistered.id "+
+    "where studentid = '" + req.body.username + "';";
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         rows.push(row);
@@ -703,8 +706,9 @@ app.post('/viewallsemester', function (req, res) {
 app.post('/addsemester', function (req, res) {
     console.log('addsemester:' + req.body.semester + ', ' + req.body.year);
     
-    var queryString = "INSERT INTO semesterregistered (semester, year) values " +
-    "('" + req.body.semester + "','" + req.body.year + "');";
+    var queryString = "SELECT * FROM semesterregistered where "+
+    "semester='" + req.body.semester+"' and "+
+    "year='" + req.body.year + "'";
     
     // res.json(queryString);
     
@@ -714,8 +718,28 @@ app.post('/addsemester', function (req, res) {
         rows.push(row);
     });
     query.on('end', function(result) {
-        res.json('added');
+        console.log('addsemestercheck: ' + result.rowCount + ' rows');
+        // res.json(rows);
+        if(result.rowCount < 1){
+            var queryString2 = "INSERT INTO semesterregistered (semester, year) values " +
+                "('" + req.body.semester + "','" + req.body.year + "');";
+                
+            // res.json(queryString);
+            
+            var rows2 = [];
+            var query2 = baseClient.query(queryString2);
+            query2.on('row', function(row) {
+                rows2.push(row);
+            });
+            query2.on('end', function(result) {
+                res.json('added');
+            });
+        }else{
+            res.json('not added');
+        }
     });
+
+    
 });
 
 app.post('/deletedatafromtable', function (req, res) {
@@ -988,7 +1012,6 @@ app.post('/addskill', function (req, res) {
 
 app.post('/viewskill', function (req, res) {
     console.log('viewskill:' + req.body.username);
-    insertFeed(req.body.username, 'updated skills set');
 
     var rows = [];
     var queryString = "select * from skill where " +

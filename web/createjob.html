@@ -95,10 +95,6 @@
           </div>
         </nav>
       </header>
-     
-
-
-
 
       <!-- Left side column. contains the logo and sidebar -->
       <aside class="main-sidebar" id="mainsidebarapp">
@@ -109,79 +105,92 @@
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          <h1 id="studentname1">
-            
+          <h1>
+            Create a Job
+            <small>Control panel</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Student</li>
+            <li >Job</li>
+            <li class="active">Create</li>
           </ol>
-
         </section>
 
-        <section class="content">
-
         <!-- Main content -->
-          <div class="row">
-            <div class="col-md-3">
+        <section class="content">
+          
 
-              <!-- Profile Image -->
-              <div class="box box-primary">
-                <div class="box-body box-profile">
-                  <img id="studentphoto1" class="profile-user-img img-responsive img-circle" src="dist/img/user2-160x160.jpg" alt="User profile picture">
-                  <h3 class="profile-username text-center" id="studentname2"></h3>
-                  <p class="text-muted text-center" id="gender"></p>
-
-                  <ul class="list-group list-group-unbordered">
-                    <li class="list-group-item">
-                      <b>Email</b> <a class="pull-right" id="email"></a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Phone</b> <a class="pull-right" id="telephone"></a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Residency</b> <a class="pull-right" id="residentstatus"></a>
-                    </li>
-
-                    <li class="list-group-item">
-                      <b>Country</b> <a class="pull-right" id="country"></a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Internship Status</b> <a class="pull-right" id="internshipstatus"></a>
-                    </li>
-                  </ul>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-
-            </div><!-- /.col -->
-            <div class="col-md-9">
+          <div class="col-md-12">
               <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                  <li class="active"><a href="#activity" data-toggle="tab">Skill Competency</a></li>
+                  <li class="active"><a data-toggle="tab">Create a new Job</a></li>
                 </ul>
                 <div class="tab-content">
-                  	<div class="active tab-pane" id="activity">
-                    <table width="100%">
-                    <tr>
-                    <td width="50%" align="left"><b>Low</b>
-                    </td>
-                    <td width="50%" align="right"><b>High</b>
-                    </td>
-                    </tr>
+                  <div class="active tab-pane" id="job">
+                    
+                    <table  data-graph-container-before="1" data-graph-type="column" width="100%">
+                    <tbody >
+                      <tr>
+                          <td>Select Company</td>
+                          <td>
+                            <select id="companyid" >
+                            </select>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Position</td>
+                          <td>
+                            <input size="50" id="position" placeholder="Enter the position here" >
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Description</td>
+                          <td>
+                            <input size="50" id="description" placeholder="Enter the description here" >
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Responsibilities</td>
+                          <td>
+                            <input size="50" id="responsibilities" placeholder="Enter the responsibilities here">
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <td>Requirements</td>
+                          <td>
+                            <input size="50" id="requirements" placeholder="Enter the requirements here" >
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Salary</td>
+                          <td>
+                            <input size="50" id="salary" placeholder="Enter the salary here" >
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Availability</td>
+                          <td>
+                            <input size="50" id="availability" placeholder="Enter the availability here">
+                          </td>
+                      </tr>
+                      <tr>
+                          <td></td>
+                          <td><br/>
+                            <input type="submit" value="Submit" style="margin-left:40px;width:20%" onclick="submitbuttonclick()">
+                          </td>
+                      </tr>
+
+                      
+                    </tbody>
                     </table>
-                    <div id="skills">
-
-                    </div>
-
-                  	</div><!-- /.tab-pane -->
-                </div><!-- /.tab-content -->
-              </div><!-- /.nav-tabs-custom -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-
-
-
-
+                    <br/>
+                    <br/>
+                    <br/>
+                  </div>
+                </div>
+              </div>
+            </div>
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
@@ -249,101 +258,76 @@
     });
 
     
-    function getstudentdetails(id){
-      $.post(HOST + "/viewstudent",
+
+    function getcompanies(search, city, country, init){
+      $.post(HOST + "/viewallcompany",
         {
-          username: id,
+          search: search,
+          city: city,
+          country: country
         },
         function(data, status){
-          	console.log(data)
-
-          $('#telephone').text(data[0].telephone);
-			    $('#country').text(data[0].country);
-			    $('#email').text(data[0].email);
-          $('#studentphoto1').attr('src', data[0].photoid);
-          $('#studentname1').text(toTitleCase(data[0].firstname + ' ' + data[0].lastname));
-          $('#studentname2').text(toTitleCase(data[0].firstname + ' ' + data[0].lastname));
-          $('#residentstatus').text(toTitleCase(data[0].residentstatus));
-    			$('#internshipstatus').text(toTitleCase(data[0].internshipstatus));
-			
-			
-
-
-      });
+          var day = document.getElementById('companyid');
+          for(var i=0; i<data.length;i++)
+            day.options[day.options.length] = 
+              new Option(toTitleCase(data[i].companyname), data[i].id);
+        }
+      );
     }
-    var id = getUrlVars()["id"];
-    getstudentdetails(id);
-    
-    function addToSkillDisplay(id, value){
-      if(value > 0){
-        var perc = value*33.33;
-        var newid = id.replace(/_/g , " ");
-        newid = newid.toUpperCase();
-        var valueToAppend = newid + '<div class="progress">'+
-                      '<div class="progress-bar" role="progressbar" aria-'+
-                      'valuenow="70" aria-valuemin="0" aria-valuemax="100"'+
-                      'style="width:'+
-                      perc+
-                      '%">'+
-                        '<span class="sr-only"></span>'+
-                      '</div>'+
-                    '</div>';
-        $("#skills").append(valueToAppend);
-      }
+       
+    getcompanies('all', 'all', 'all', 'yes');
+
+
+    function submitbuttonclick(){
+      console.log('clicked');
+      
+      var username = localStorage.username;
+      var e1 = document.getElementById("companyid");
+      var companyid = e1.options[e1.selectedIndex].value;
+      var position = $('#position').val();
+      var description = $('#description').val();
+      var responsibilities = $('#responsibilities').val();
+      var requirements = $('#requirements').val();
+      var salary = $('#salary').val();
+      var availability = $('#availability').val();
+
+console.log(username.length);
+console.log(companyid.length);
+console.log(position.length);
+console.log(description.length);
+console.log(responsibilities.length);
+console.log(requirements.length);
+console.log(salary.length);
+console.log(availability.length);
+
+
+      if(username.length > 0 && companyid.length > 0 && position.length > 0 && description.length > 0 && responsibilities.length > 0 && requirements.length > 0 && salary.length > 0 && availability.length > 0){
+          $.post(HOST + "/addjob",
+            {
+              username: username,
+              companyid: companyid,
+              position: position,
+              description: description,
+              responsibilities: responsibilities,
+              requirements: requirements,
+              salary: salary,
+              availability: availability
+            },
+            function(data, status){
+                console.log(data);
+                swal("Congratulations", "You created a new job, on our database of course :)");
+                setTimeout(function () {
+                  window.location.replace("job.html");
+                }, 3000)
+            });
+        }else{
+          sweetAlert("Oops...", "Please enter all the values!", "error");
+        }
+
+
+
+      
     }
-
-
-
-  function getstudentskill(id){
-      $.post(HOST + "/viewskill",
-        {
-          username: id,
-        },
-        function(data, status){
-            console.log(data)
-            addToSkillDisplay('asp_dot_net', data[0].asp_dot_net); 
-            addToSkillDisplay('c', data[0].c); 
-            addToSkillDisplay('cplusplus', data[0].cplusplus); 
-            addToSkillDisplay('csharp', data[0].csharp); 
-            addToSkillDisplay('flex', data[0].flex); 
-            addToSkillDisplay('java', data[0].java); 
-            addToSkillDisplay('javascript', data[0].javascript); 
-            addToSkillDisplay('lisp', data[0].lisp); 
-            addToSkillDisplay('matlab', data[0].matlab); 
-            addToSkillDisplay('mysql', data[0].mysql); 
-            addToSkillDisplay('objectivec', data[0].objectivec); 
-            addToSkillDisplay('pascal', data[0].pascal); 
-            addToSkillDisplay('perl', data[0].perl); 
-            addToSkillDisplay('php', data[0].php); 
-            addToSkillDisplay('prolog', data[0].prolog); 
-            addToSkillDisplay('python', data[0].python); 
-            addToSkillDisplay('r', data[0].r); 
-            addToSkillDisplay('ruby', data[0].ruby); 
-            addToSkillDisplay('sql_oracle', data[0].sql_oracle); 
-            addToSkillDisplay('tcl', data[0].tcl); 
-            addToSkillDisplay('t_sql', data[0].t_sql); 
-            addToSkillDisplay('vb_dot_net', data[0].vb_dot_net); 
-            addToSkillDisplay('concrete', data[0].concrete); 
-            addToSkillDisplay('dotnetnuke', data[0].dotnetnuke); 
-            addToSkillDisplay('drupal', data[0].drupal); 
-            addToSkillDisplay('joomla', data[0].joomla); 
-            addToSkillDisplay('wordpress', data[0].wordpress); 
-            addToSkillDisplay('android', data[0].android); 
-            addToSkillDisplay('chromeos', data[0].chromeos); 
-            addToSkillDisplay('ios', data[0].ios); 
-            addToSkillDisplay('linux', data[0].linux); 
-            addToSkillDisplay('macos', data[0].macos); 
-            addToSkillDisplay('unix', data[0].unix); 
-            addToSkillDisplay('windows', data[0].windows);
-      });
-    }
-
-    getstudentskill(id);
-
-$(document).ready(function() {
-  $('table.highchart').highchartTable();
-});
-
 
 
     </script>
