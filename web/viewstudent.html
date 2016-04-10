@@ -177,6 +177,74 @@
                 </div><!-- /.tab-content -->
               </div><!-- /.nav-tabs-custom -->
             </div><!-- /.col -->
+
+            <div class="col-md-9" style="float: right;">
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#activity" data-toggle="tab">Education</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="education">
+                    <table width="100%">
+                      <thead>
+                      <tr>
+                          <th width="15%">Degree Type</th>
+                          <th width="15%">Major</th>
+                          <th width="15%">GPA</th>
+                          <th width="15%">University</th>
+                          <th width="15%">Location</th>
+                          <th width="15%">Certifications</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableentry">
+                      <!-- <tr>
+                          <td>January</td>
+                          <td>8000</td>
+                      </tr>
+                      <tr>
+                          <td>February</td>
+                          <td>12000</td>
+                      </tr> -->
+                    </tbody>
+                    </table>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+              </div><!-- /.nav-tabs-custom -->
+            </div><!-- /.col -->
+
+            <div class="col-md-9" style="float: right;">
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#activity" data-toggle="tab">Work Experience</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="workexperience">
+                    <table width="100%">
+                      <thead>
+                      <tr>
+                          <th width="15%"></th>
+                          <th width="15%">Name</th>
+                          <th width="15%">Type</th>
+                          <th width="15%">Start Date</th>
+                          <th width="15%">End Date</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tableentry2">
+                      <!-- <tr>
+                          <td>January</td>
+                          <td>8000</td>
+                      </tr>
+                      <tr>
+                          <td>February</td>
+                          <td>12000</td>
+                      </tr> -->
+                    </tbody>
+                    </table>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+              </div><!-- /.nav-tabs-custom -->
+            </div><!-- /.col -->
+
           </div><!-- /.row -->
 
 
@@ -269,6 +337,59 @@
 			
 
 
+      });
+      //education
+      $.post(HOST + "/viewstudenteducation",
+        {
+          username: id,
+        },
+        function(data, status){
+            console.log(data)
+            $("#tableentry").empty();
+            for(var i=0; i<data.length; i++){
+              var valueToAppend = '<tr><td>'+
+              data[i].degreetype+
+              '</td><td>'+
+              data[i].major+
+              '</td><td>'+
+              data[i].gpa+
+              '</td><td>'+
+              data[i].university+
+              '</td><td>'+
+              data[i].location+
+              '</td><td>'+
+              data[i].certifications+
+              '</td></tr>';
+              $("#tableentry").append(valueToAppend);              
+            }      
+      });
+      //workexperience
+      $.post(HOST + "/viewstudentworkexperience",
+        {
+          username: id,
+        },
+        function(data, status){
+            console.log(data)
+            $("#tableentry2").empty();
+            for(var i=0; i<data.length; i++){
+              var valueToAppend = '<tr><td>'+
+              '<center><img src="'+
+              data[i].photoid +
+              '" class="user-image" alt="User Image" style="height: 50px;">'+
+              '</center></td><td>'+
+              '<a href="viewcompany.html?id='+
+              data[i].id+
+              '">'+
+              toTitleCase(data[i].companyname)+
+              '</td><td>'+
+              toTitleCase(data[i].type)+
+              '</td><td>'+
+              dateFormat(data[i].startdate)+
+              '</td><td>'+
+              dateFormat(data[i].enddate)+
+              '</td></tr>';
+              $("#tableentry2").append(valueToAppend);              
+            }      
       });
     }
     var id = getUrlVars()["id"];
