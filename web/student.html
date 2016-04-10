@@ -60,7 +60,11 @@
             <ul class="nav navbar-nav">
 
               <!-- User Account: style can be found in dropdown.less -->
-              <li class="dropdown user user-menu">
+         		<li>
+                 <img id="loadingimage" style="margin-top: 5px;" src="dist/img/loading.gif" height="40px">
+         		</li>
+         		<li class="dropdown user user-menu">
+
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img id="photo1" src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                   <span id="nameofadmin1" class="hidden-xs"></span>
@@ -172,7 +176,7 @@
                         </select></a>
                   </li>
                   <li><a data-toggle="tab">
-                  		<input id="searchstudent" placeholder="Search..." onkeypress="fieldchange()">
+                  		<input id="searchstudent" placeholder="Search..." onkeydown="fieldchanged()"></a>
                   </li>
                 </ul>
                 <div class="tab-content">
@@ -267,6 +271,7 @@
     
 
     function getallstudents(search, gender, residentstatus, country, semesterregistered, internshipstatus, salary, gpa, init){
+    	$('#loadingimage').show();
       $.post(HOST + "/showstudents",
         {
           search: search,
@@ -279,8 +284,9 @@
           gpa: gpa
         },
 		function(data, status){
-          console.log(data);
-          $("#tableentry").empty();
+          	console.log(data);
+    	 	$("#tableentry").empty();
+        	$('#loadingimage').hide();
 
           var valuesGender = [];
           var valuesResidentstatus = [];
@@ -305,7 +311,7 @@
                 data[i].studentid;
                 valueToAppend += '</td><td>'+
                 '<img src="dist/img/delete.png" height="20px" width="20px"'+
-                'rowid="'+data[i].studentrowid+'" '+
+                'rowid="'+data[i].id+'" '+
                 'rowname="'+data[i].firstname+'" '+
                 'table="student"'+
                 ' onclick="deleteimagetap(this)" />';
@@ -362,6 +368,50 @@
 	}
 
 
+	function fieldchanged(){
+		var e1 = $('#searchstudent').val();
+
+		var e2 = document.getElementById("genderfield");
+		var se2 = e2.options[e2.selectedIndex].value;
+
+		var e3 = document.getElementById("residentstatusfield");
+		var se3 = e3.options[e3.selectedIndex].value;
+
+		var e4 = document.getElementById("countryfield");
+		var se4 = e4.options[e4.selectedIndex].value;
+
+		var e5 = document.getElementById("semesterregisteredfield");
+		var se5 = e5.options[e5.selectedIndex].value;
+
+		var e6 = document.getElementById("internshipstatusfield");
+		var se6 = e6.options[e6.selectedIndex].value;
+
+		var e7 = document.getElementById("salary1field");
+		var se7 = e7.options[e7.selectedIndex].value;
+
+		var e8 = document.getElementById("salary2field");
+		var se8 = e8.options[e8.selectedIndex].value;
+
+		var e9 = document.getElementById("gpa1field");
+		var se9 = e9.options[e9.selectedIndex].value;
+
+		var e10 = document.getElementById("gpa2field");
+		var se10 = e10.options[e10.selectedIndex].value;
+
+		if(se8 == 'all'){
+			se7 ='all'
+		}else{
+			se7 = se7+se8;
+		}
+		if(se10 == 'all'){
+			se9 ='all'
+		}else{
+			se9 = se9+se10;
+		}
+
+		console.log(e1, se2, se3, se4, se5, se6, se7, se9, 'no')
+		getallstudents(e1, se2, se3, se4, se5, se6, se7, se9, 'no')
+    }
     </script>
 
   </body>

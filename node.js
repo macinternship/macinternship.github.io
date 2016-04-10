@@ -323,7 +323,7 @@ app.post('/updateskill', function (req, res) {
     "studentid = '" + req.body.username + "';"; 
     console.log(queryString)
     var query = baseClient.query(queryString);
-    res.json('added');
+    res.json('updateskill');
 });
 
 app.post('/addstudentjobachieved', function (req, res) {
@@ -411,18 +411,18 @@ app.post('/showstudents', function (req, res) {
     console.log('showstudents: parameters');
     
     //search
-    var searchQuery = "(firstname is NOT NULL OR firstname is NULL) OR " +
+    var searchQuery = "((firstname is NOT NULL OR firstname is NULL) OR " +
         "(middlename is NOT NULL OR middlename is NULL) OR " + 
-        "(lastname is NOT NULL OR lastname is NULL)";
+        "(lastname is NOT NULL OR lastname is NULL))";
     if(req.body.search.length > 0){
-        searchQuery = "(firstname like '%" + req.body.search + "%') OR " +
+        searchQuery = "((firstname like '%" + req.body.search + "%') OR " +
             "(middlename like '%" + req.body.search + "%') OR " + 
-            "(lastname like '%" + req.body.search + "%')";
+            "(lastname like '%" + req.body.search + "%'))";
     }
     var rows = [];
     var studentids = '';
     //student info
-    var display = req.body.gender == "all"?"(gender like '%')":"(gender like '%" + req.body.gender + "%')";
+    var display = req.body.gender == "all"?"(gender like '%')":"(gender like '" + req.body.gender + "')";
     display += " AND ";
     display += req.body.residentstatus == "all"?"(residentstatus like '%')":"(residentstatus = '" + req.body.residentstatus + "')";
     display += " AND ";
@@ -454,12 +454,16 @@ app.post('/showstudents', function (req, res) {
     // res.json(queryString);
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
-        rows.push(row);
+        // rows.push(row);
         studentids += "'" + row.id + "',";
     });
     query.on('end', function(result) {
         console.log('showstudents: ' + result.rowCount + ' rows');
-        // console.log(rows);
+        console.log('studentids: ' + studentids);
+        if(studentids.length == 0){
+            res.json(rows);
+            return 1;
+        }
         studentids = studentids.substring(0, studentids.length-1);
         // res.json(studentids);
         if(req.body.gpa == 'all'){
@@ -482,6 +486,10 @@ app.post('/showstudents', function (req, res) {
             query2.on('end', function(result) {
                 console.log('getgpa: ' + result.rowCount + ' rows');
                 console.log(studentidsNew);
+                if(studentidsNew.length == 0){
+                    res.json(rows);
+                    return 1;
+                }
                 studentidsNew = studentidsNew.substring(0, studentidsNew.length-1);
                 showStudents(studentidsNew, res);
             });
@@ -490,7 +498,7 @@ app.post('/showstudents', function (req, res) {
 });
 
 function showStudents(studentids, res){
-    var queryString = "select login.photoid, "+
+    var queryString = "select login.photoid, student.id, "+
         "student.firstname, student.internshipstatus,"+
         "student.lastname, student.residentstatus, student.country, student.gender, "+
         "student.studentid from login inner join student on "+
@@ -928,6 +936,71 @@ app.post('/viewstudentinterestbystudentid', function (req, res) {
     });
     query.on('end', function(result) {
         console.log('viewstudentinterestbystudentid: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/addskill', function (req, res) {
+    console.log('addskill:' + req.body.username);
+    insertFeed(req.body.username, 'added skills set');
+
+    var rows = [];
+    var queryString = "INSERT INTO skill VALUES (" +
+        "'" + req.body.asp_dot_net + "'," + 
+        "'" + req.body.c + "'," + 
+        "'" + req.body.cplusplus + "'," + 
+        "'" + req.body.csharp + "'," + 
+        "'" + req.body.flex + "'," + 
+        "'" + req.body.java + "'," + 
+        "'" + req.body.javascript + "'," + 
+        "'" + req.body.lisp + "'," + 
+        "'" + req.body.matlab + "'," + 
+        "'" + req.body.mysql + "'," + 
+        "'" + req.body.objectivec + "'," + 
+        "'" + req.body.pascal + "'," + 
+        "'" + req.body.perl + "'," + 
+        "'" + req.body.php + "'," + 
+        "'" + req.body.prolog + "'," + 
+        "'" + req.body.python + "'," + 
+        "'" + req.body.r + "'," + 
+        "'" + req.body.ruby + "'," + 
+        "'" + req.body.sql_oracle + "'," + 
+        "'" + req.body.tcl + "'," + 
+        "'" + req.body.t_sql + "'," + 
+        "'" + req.body.vb_dot_net + "'," + 
+        "'" + req.body.concrete + "'," + 
+        "'" + req.body.dotnetnuke + "'," + 
+        "'" + req.body.drupal + "'," + 
+        "'" + req.body.joomla + "'," + 
+        "'" + req.body.wordpress + "'," + 
+        "'" + req.body.android + "'," + 
+        "'" + req.body.chromeos + "'," + 
+        "'" + req.body.ios + "'," + 
+        "'" + req.body.linux + "'," + 
+        "'" + req.body.macos + "'," + 
+        "'" + req.body.unix + "'," + 
+        "'" + req.body.windows + "')";
+    console.log(queryString)
+    var query = baseClient.query(queryString);
+    res.json('updateskill');
+});
+
+
+app.post('/viewskill', function (req, res) {
+    console.log('viewskill:' + req.body.username);
+    insertFeed(req.body.username, 'updated skills set');
+
+    var rows = [];
+    var queryString = "select * from skill where " +
+    "studentid = '" + req.body.username + "';"; 
+    // console.log(queryString)
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewskill: ' + result.rowCount + ' rows');
         res.json(rows);
     });
 });
