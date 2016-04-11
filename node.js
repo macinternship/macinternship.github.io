@@ -88,7 +88,7 @@ app.post('/createaccount', function (req, res) {
         createstudent(req.body.username, req.body.firstname, req.body.middlename, 
             req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
             req.body.residentstatus, req.body.country, req.body.semesterregistered,
-            req.body.internshipstatus);
+            req.body.currentgpa, req.body.internshipstatus);
         createzerovaluedskills(req.body.username);
     }
     res.json('created');
@@ -113,11 +113,11 @@ function createaccount(username, password, photoid, type){
 
 function createstudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, country, semesterregistered, internshipstatus){
+            residentstatus, country, semesterregistered, currentgpa, internshipstatus){
     var rows = [];
     var queryString = "INSERT INTO student (studentid, firstname, middlename, "+
             "lastname, email, telephone, gender, " +
-            "residentstatus, country, semesterregistered, internshipstatus) VALUES ('" + 
+            "residentstatus, country, semesterregistered, currentgpa, internshipstatus) VALUES ('" + 
     username + "', '" +  
     firstname + "', '" +  
     middlename + "', '" +  
@@ -128,6 +128,7 @@ function createstudent(username, firstname, middlename,
     residentstatus + "', '" +  
     country + "', '" +  
     semesterregistered + "', '" +  
+    currentgpa + "', '" +  
     internshipstatus + "');";
 
     var query = baseClient.query(queryString);
@@ -145,13 +146,13 @@ app.post('/updatestudent', function (req, res) {
     updatestudent(req.body.username, req.body.firstname, req.body.middlename, 
         req.body.lastname, req.body.email, req.body.telephone, req.body.gender, 
         req.body.residentstatus, req.body.country, req.body.semesterregistered, 
-        req.body.internshipstatus);
+        req.body.currentgpa, req.body.internshipstatus);
     res.json('updated');
 });
 
 function updatestudent(username, firstname, middlename, 
             lastname, email, telephone, gender, 
-            residentstatus, country, semesterregistered, internshipstatus){
+            residentstatus, country, semesterregistered, currentgpa, internshipstatus){
     var rows = [];
     var queryString = "UPDATE student SET " +
     "firstname = '" + firstname + "', " +  
@@ -163,6 +164,7 @@ function updatestudent(username, firstname, middlename,
     "residentstatus = '" + residentstatus + "', " +  
     "country = '" + country + "', " +  
     "semesterregistered = '" + semesterregistered + "', " +  
+    "currentgpa = " + currentgpa + ", " +  
     "internshipstatus = '" + internshipstatus + "' where " +
     "studentid = '" + username + "';";    
 
@@ -409,16 +411,22 @@ function parseTwitterDate(tdate) {
 //SELECT STUDENTS
 app.post('/showstudents', function (req, res) {
     console.log('showstudents: parameters');
+    console.log('1');
     
     //search
     var searchQuery = "((firstname is NOT NULL OR firstname is NULL) OR " +
         "(middlename is NOT NULL OR middlename is NULL) OR " + 
         "(lastname is NOT NULL OR lastname is NULL))";
-    if(req.body.search.length > 0){
-        searchQuery = "((firstname like '%" + req.body.search + "%') OR " +
-            "(middlename like '%" + req.body.search + "%') OR " + 
-            "(lastname like '%" + req.body.search + "%'))";
+    if(req.body.search != undefined){
+        if(req.body.search.length > 0){
+            searchQuery = "((firstname like '%" + req.body.search + "%') OR " +
+                "(middlename like '%" + req.body.search + "%') OR " + 
+                "(student.studentid like '%" + req.body.search + "%') OR " + 
+                "(lastname like '%" + req.body.search + "%'))";
+        }
     }
+    console.log('2');
+
     var rows = [];
     var studentids = '';
     //student info
@@ -428,7 +436,11 @@ app.post('/showstudents', function (req, res) {
     display += " AND ";
     display += req.body.country == "all"?"(country like '%')":"(country = '" + req.body.country + "')";
     display += " AND ";
+    display += req.body.companyid == "all"?"(job.companyid like '%')":"(job.companyid = '" + req.body.companyid + "')";
+    display += " AND ";
     display += req.body.semesterregistered == "all"?"(semesterregistered like '%')":"(semesterregistered = '" + req.body.semesterregistered + "')";
+    display += " AND ";
+    display += req.body.currentgpa == "all"?"(currentgpa != -1)":"(currentgpa " + req.body.currentgpa + ")";
     display += " AND ";
     display += req.body.internshipstatus == "all"?"(internshipstatus like '%')":"(internshipstatus = '" + req.body.internshipstatus + "')";
 
@@ -441,17 +453,21 @@ app.post('/showstudents', function (req, res) {
     }
 
     //salary
-    var salary = req.body.salary == "all"?"(salary is NOT NULL OR salary is NULL)":"(cast(salary as int) " + req.body.salary + ")";
+    var salary = req.body.salary == "all"?"(salary is NOT NULL OR "+
+    "salary is NULL)":"(cast(salary as int) " + req.body.salary + ")";
 
     var queryString = "SELECT distinct on (student.id) student.id " + 
-    "FROM login inner join student on login.username = student.studentid left join " + 
+    "FROM login inner join student on login.username = student.studentid "+
+    "left join " + 
     " student_job_achieved on student.studentid = student_job_achieved.studentid " +
-    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + display + " and " +
+    "left join job on cast(student_job_achieved.jobid as int) = job.id where " + 
+    display + " and " +
     hired + " and " +
     salary + " and " +
     searchQuery;
 
-    // res.json(queryString);
+    console.log('3');
+    console.log(queryString);
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
         // rows.push(row);
@@ -461,45 +477,47 @@ app.post('/showstudents', function (req, res) {
         console.log('showstudents: ' + result.rowCount + ' rows');
         console.log('studentids: ' + studentids);
         if(studentids.length == 0){
+            rows = [];
             res.json(rows);
-            return 1;
-        }
-        studentids = studentids.substring(0, studentids.length-1);
-        // res.json(studentids);
-        if(req.body.gpa == 'all'){
-            //send student details
-            showStudents(studentids, res);
-
+            // return 1;
         }else{
-            var queryString = "select student.id from education "+
-                "inner join student on cast(student.studentid as int) = "+
-                "cast(education.studentid as int) group by " +
-                "student.id having student.id in (" + studentids + ") and avg(gpa) "+req.body.gpa+";"
-            var studentidsNew ='';
-            var rows = [];
-            // res.json(queryString);
-            var query2 = baseClient.query(queryString);
-            query2.on('row', function(row) {
-                // rows.push(row);
-                studentidsNew += "'" + row.id + "',";
-            });
-            query2.on('end', function(result) {
-                console.log('getgpa: ' + result.rowCount + ' rows');
-                console.log(studentidsNew);
-                if(studentidsNew.length == 0){
-                    res.json(rows);
-                    return 1;
-                }
-                studentidsNew = studentidsNew.substring(0, studentidsNew.length-1);
-                showStudents(studentidsNew, res);
-            });
+            studentids = studentids.substring(0, studentids.length-1);
+            // res.json(studentids);
+            if(req.body.gpa == 'all'){
+                //send student details
+                showStudents(studentids, res);
+
+            }else{
+                var queryString = "select student.id from education "+
+                    "inner join student on cast(student.studentid as int) = "+
+                    "cast(education.studentid as int) group by " +
+                    "student.id having student.id in (" + studentids + ") and avg(gpa) "+req.body.gpa+";"
+                var studentidsNew ='';
+                var rows = [];
+                // res.json(queryString);
+                var query2 = baseClient.query(queryString);
+                query2.on('row', function(row) {
+                    // rows.push(row);
+                    studentidsNew += "'" + row.id + "',";
+                });
+                query2.on('end', function(result) {
+                    console.log('getgpa: ' + result.rowCount + ' rows');
+                    console.log(studentidsNew);
+                    if(studentidsNew.length == 0){
+                        res.json(rows);
+                        return 1;
+                    }
+                    studentidsNew = studentidsNew.substring(0, studentidsNew.length-1);
+                    showStudents(studentidsNew, res);
+                });
+            }
         }
     });
 });
 
 function showStudents(studentids, res){
     var queryString = "select login.photoid, student.id, "+
-        "student.firstname, student.internshipstatus,"+
+        "student.firstname, student.currentgpa, student.internshipstatus,"+
         "student.lastname, student.residentstatus, student.country, student.gender, "+
         "student.studentid from login inner join student on "+
         "login.username = student.studentid "+
@@ -866,6 +884,43 @@ app.post('/dashboardstudentcountry', function (req, res) {
     });
 });
 
+app.post('/dashboardlikedpositions', function (req, res) {
+    console.log('dashboardlikedpositions:');
+    
+    var queryString = "select count(*), position from job inner join student_job_interest on job.id = cast(student_job_interest.jobid as int) group by position";
+
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('dashboardlikedpositions: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+app.post('/dashboardskilltotal', function (req, res) {
+    console.log('dashboardskilltotal:');
+    
+    var queryString = "select sum(asp_dot_net) as asp_dot_net, sum(c) as c, sum(cplusplus) as cplusplus, sum(csharp) as csharp, sum(flex) as flex, sum(java) as java, sum(javascript) as javascript, sum(lisp) as lisp, sum(matlab) as matlab, sum(mysql) as mysql, sum(objectivec) as objectivec, sum(pascal) as pascal, sum(perl) as perl, sum(php) as php, sum(prolog) as prolog, sum(python) as python, sum(r) as r, sum(ruby) as ruby, sum(sql_oracle) as sql_oracle, sum(tcl) as tcl, sum(t_sql) as t_sql, sum(vb_dot_net) as vb_dot_net, sum(concrete) as concrete, sum(dotnetnuke) as dotnetnuke, sum(drupal) as drupal, sum(joomla) as joomla, sum(wordpress) as wordpress, sum(android) as android, sum(chromeos) as chromeos, sum(ios) as ios, sum(linux) as linux, sum(macos) as macos, sum(unix) as unix, sum(windows) as windows from skill";
+    // res.json(queryString);
+    
+    var rows = [];
+    var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('dashboardskilltotal: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
+
+
 app.post('/viewstudentachievedbyjobid', function (req, res) {
     console.log('viewstudentachievedbyjobid:' + req.body.id);
     
@@ -873,7 +928,7 @@ app.post('/viewstudentachievedbyjobid', function (req, res) {
     "student.firstname, "+
     "student.lastname, student.country, student.gender, "+
     "student.studentid from login inner join student on "+
-    "cast(login.username as int) = cast(student.studentid as int) "+
+    "login.username = student.studentid "+
     "inner join student_job_achieved on cast(student.studentid as int) "+
     "= cast(student_job_achieved.studentid as int) inner join job on "+
     "cast(student_job_achieved.jobid as int) = job.id "+
@@ -898,7 +953,7 @@ app.post('/viewstudentinterestbyjobid', function (req, res) {
     "student.firstname, "+
     "student.lastname, student.country, student.gender, "+
     "student.studentid from login inner join student on "+
-    "cast(login.username as int) = cast(student.studentid as int) "+
+    "login.username = student.studentid "+
     "inner join student_job_interest on cast(student.studentid as int) "+
     "= cast(student_job_interest.studentid as int) inner join job on "+
     "cast(student_job_interest.jobid as int) = job.id "+
@@ -921,7 +976,7 @@ app.post('/viewstudentachievedbystudentid', function (req, res) {
     
     var queryString = "select student_job_achieved.id as superid, * "+
     "from login inner join student on "+
-    "cast(login.username as int) = cast(student.studentid as int) "+
+    "login.username = student.studentid "+
     "inner join student_job_achieved on cast(student.studentid as int) "+
     "= cast(student_job_achieved.studentid as int) inner join job on "+
     "cast(student_job_achieved.jobid as int) = job.id "+
@@ -945,7 +1000,7 @@ app.post('/viewstudentinterestbystudentid', function (req, res) {
     
     var queryString = "select student_job_interest.id as superid, * "+
     "from login inner join student on "+
-    "cast(login.username as int) = cast(student.studentid as int) "+
+    "login.username = student.studentid "+
     "inner join student_job_interest on cast(student.studentid as int) "+
     "= cast(student_job_interest.studentid as int) inner join job on "+
     "cast(student_job_interest.jobid as int) = job.id "+
@@ -970,6 +1025,7 @@ app.post('/addskill', function (req, res) {
 
     var rows = [];
     var queryString = "INSERT INTO skill VALUES (" +
+        "'" + req.body.username + "'," + 
         "'" + req.body.asp_dot_net + "'," + 
         "'" + req.body.c + "'," + 
         "'" + req.body.cplusplus + "'," + 
@@ -1006,7 +1062,7 @@ app.post('/addskill', function (req, res) {
         "'" + req.body.windows + "')";
     console.log(queryString)
     var query = baseClient.query(queryString);
-    res.json('updateskill');
+    res.json('addskill');
 });
 
 

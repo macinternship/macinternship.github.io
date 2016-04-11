@@ -142,6 +142,21 @@
                         <option value="all">all</option></select></a>
                   </li>
                   <li><a data-toggle="tab">
+                        Current GPA: <select id="currentgpa1field" 
+                        onchange="fieldchanged()">
+                        <option value="=">=</option>
+                        <option value=">">></option>
+                        <option value="<"><</option></select>
+                        <select id="currentgpa2field" 
+                        onchange="fieldchanged()">
+                        <option value="all">all</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        </select></a>
+                  </li>
+                  <li><a data-toggle="tab">
                         Internship Status: <select id="internshipstatusfield" onchange="fieldchanged()">
                         <option value="all">all</option></select></a>
                   </li>
@@ -161,7 +176,7 @@
                         </select></a>
                   </li>
                   <li><a data-toggle="tab">
-                        GPA: <select id="gpa1field" 
+                        Previous GPA: <select id="gpa1field" 
                         onchange="fieldchanged()">
                         <option value="=">=</option>
                         <option value=">">></option>
@@ -176,7 +191,11 @@
                         </select></a>
                   </li>
                   <li><a data-toggle="tab">
-                  		<input id="searchstudent" placeholder="Search..." onkeydown="fieldchanged()"></a>
+                      Employer: <select id="companyid" onchange="fieldchanged()">
+                      </select>
+                  </li>
+                  <li><a data-toggle="tab">
+                  		<input id="searchstudent" placeholder="Search..." onkeyup="fieldchanged()"></a>
                   </li>
                 </ul>
                 <div class="tab-content">
@@ -268,9 +287,29 @@
       $("#mainsidebarapp").html(data);
     });
 
-    
+    function getcompanies(search, city, country, init){
+      $.post(HOST + "/viewallcompany",
+        {
+          search: search,
+          city: city,
+          country: country
+        },
+        function(data, status){
+          var day = document.getElementById('companyid');
+          day.options[day.options.length] = 
+              new Option('all', 'all');
+          for(var i=0; i<data.length;i++){
+            // console.log(data[i])
+            day.options[day.options.length] = 
+              new Option(toTitleCase(data[i].companyname), data[i].id);
+          }
+        }
+      );
+    }
+       
+    getcompanies('all', 'all', 'all', 'yes');
 
-    function getallstudents(search, gender, residentstatus, country, semesterregistered, internshipstatus, salary, gpa, init){
+    function getallstudents(search, gender, residentstatus, country, semesterregistered, internshipstatus, salary, gpa, currentgpa, companyid, init){
     	$('#loadingimage').show();
       $.post(HOST + "/showstudents",
         {
@@ -279,9 +318,11 @@
           residentstatus: residentstatus,
           country: country,
           semesterregistered: semesterregistered,
+          currentgpa: currentgpa,
           internshipstatus: internshipstatus,
           salary: salary,
-          gpa: gpa
+          gpa: gpa,
+          companyid: companyid
         },
 		function(data, status){
           	console.log(data);
@@ -342,7 +383,7 @@
       });
     }
 
-    getallstudents('', 'all', 'all', 'all', 'all', 'all', 'all', 'all', 'yes');
+    getallstudents('', 'all', 'all', 'all', 'all', 'all', 'all', 'all', 'all', 'all', 'yes');
 
     $.post(HOST + "/viewallsemester",
     {
@@ -369,6 +410,7 @@
 
 
 	function fieldchanged(){
+
 		var e1 = $('#searchstudent').val();
 
 		var e2 = document.getElementById("genderfield");
@@ -398,6 +440,15 @@
 		var e10 = document.getElementById("gpa2field");
 		var se10 = e10.options[e10.selectedIndex].value;
 
+    var e11 = document.getElementById("currentgpa1field");
+    var se11 = e11.options[e11.selectedIndex].value;
+
+    var e12 = document.getElementById("currentgpa2field");
+    var se12 = e12.options[e12.selectedIndex].value;
+
+    var e13 = document.getElementById("companyid");
+    var se13 = e13.options[e13.selectedIndex].value;
+
 		if(se8 == 'all'){
 			se7 ='all'
 		}else{
@@ -408,10 +459,16 @@
 		}else{
 			se9 = se9+se10;
 		}
-
-		console.log(e1, se2, se3, se4, se5, se6, se7, se9, 'no')
-		getallstudents(e1, se2, se3, se4, se5, se6, se7, se9, 'no')
+    if(se12 == 'all'){
+      se11 ='all'
+    }else{
+      se11 = se11+se12;
     }
+
+		console.log(e1, se2, se3, se4, se5, se6, se7, se9, se11, se13, 'no')
+		getallstudents(e1, se2, se3, se4, se5, se6, se7, se9, se11, se13, 'no')
+    }
+
     </script>
 
   </body>
