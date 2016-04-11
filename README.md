@@ -1,4 +1,4 @@
-# macinternship.github.io
+# MAC Admin
 
 Student: http://macstudent.github.io/login.html
 
