@@ -396,8 +396,6 @@
     getstudentdetails(id);
     
     function addToSkillDisplay(id, value){
-            console.log('hanji2')
-      console.log(value);
       if(value > 0){
         var perc = value*33.33;
         var newid = id.replace(/_/g , " ");
@@ -423,8 +421,6 @@
           username: id,
         },
         function(data, status){
-            console.log('hanji')
-            console.log(data)
             addToSkillDisplay('asp_dot_net', data[0].asp_dot_net); 
             addToSkillDisplay('c', data[0].c); 
             addToSkillDisplay('cplusplus', data[0].cplusplus); 
