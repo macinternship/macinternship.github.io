@@ -257,6 +257,22 @@ app.post('/addinternship', function (req, res) {
     res.json('added');
 });
 
+app.post('/viewinternship', function (req, res) {
+    console.log('viewinternship:' + req.body.username);
+
+    var rows = [];
+    var queryString = "select * from internship";
+
+     var query = baseClient.query(queryString);
+    query.on('row', function(row) {
+        rows.push(row);
+    });
+    query.on('end', function(result) {
+        console.log('viewstudent: ' + result.rowCount + ' rows');
+        res.json(rows);
+    });
+});
+
 app.post('/addjob', function (req, res) {
     console.log('addjob:' + req.body.username);
     insertFeed(req.body.username, 'posted a new job');
@@ -523,6 +539,8 @@ function showStudents(studentids, res){
         "login.username = student.studentid "+
         "where student.id in(" + studentids + ");"
     var rows = [];
+    console.log('this is what we need');
+    console.log(queryString);
     // res.json(queryString);
     var query = baseClient.query(queryString);
     query.on('row', function(row) {
