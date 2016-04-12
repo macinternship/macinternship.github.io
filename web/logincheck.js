@@ -61,7 +61,7 @@ function upimagetap(that){
 
   swal({   title: "Do you really want to offer this job to "+
     localStorage.rownametodelete + " (id: " +
-    localStorage.rowidtodelete + ")",   showCancelButton: true,   
+    localStorage.jobid + ")",   showCancelButton: true,   
     closeOnConfirm: false,   animation: "slide-from-top"}, 
     function(inputValue){   
       if (inputValue === false) 
