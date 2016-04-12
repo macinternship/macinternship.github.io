@@ -5,8 +5,8 @@ if(localStorage.username == undefined){
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-function onlyUnique(value, index, self) { 
+
+}function onlyUnique(value, index, self) { 
     return self.indexOf(value) === index;
 }
 // Read a page's GET URL variables and return them as an associative array.
