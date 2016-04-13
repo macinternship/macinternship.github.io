@@ -1,5 +1,4 @@
-# MAC Admin
+# MAC 
+# Internship Management Information System
 
-Student: http://macstudent.github.io/login.html
-
-Admin: http://macinternship.github.io/web/login.html
+http://macinternship.github.io/main
